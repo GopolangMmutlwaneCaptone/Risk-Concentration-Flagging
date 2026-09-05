@@ -10,6 +10,7 @@
 - [Problem Statement](#problem-statement)
 - [Repository Structure](#repository-structure)
 - [Data Request](#data-request)
+- [RAAIDD Log](#raaidd-log)
 - [Related Documentation](#related-documentation)
 
 ## Motivation
@@ -21,13 +22,10 @@ This issue matters on two levels. For individual clients, particularly first-tim
 
 Data science offers a practical means of identifying concentration risk earlier than current operations allow. By analysing holdings data, it is possible to quantify each portfolio's concentration using a measure such as the Herfindahl-Hirschman Index, and to combine this with other portfolio characteristics, such as top-holding percentage, number of distinct holdings, and sector exposure, to predict whether a portfolio is at elevated risk of a concentration-amplified loss in the following period, relative to a market benchmark. Rather than relying on complaints as the primary signal that something has gone wrong, such an approach could support STADIOEquities' client service and product teams in intervening earlier, for example, through timely guidance or diversification prompts before a loss occurs. This would not eliminate investment risk, which is inherent to any market participation, but it may meaningfully assist STADIOEquities in identifying and supporting clients who are exposed to avoidable, concentration-driven risk.
 
-
-
 ---
 
 ## Problem Statement
-
-
+Despite STADIOEquities' current approach of identifying unsuitable investment behaviour only after a client has already suffered a loss and lodged a complaint, it remains unclear whether portfolio concentration measures, such as the Herfindahl-Hirschman Index, top-holding percentage, number of distinct holdings, and sector exposure, can be used to predict which portfolios are at elevated risk of a concentration-amplified loss relative to a market benchmark. Therefore, this study aims to build and evaluate a predictive model using SEC Form 13F institutional holdings data, a publicly available proxy for client portfolio behaviour, in order to support earlier, proactive intervention by STADIOEquities before losses occur.
 
 ---
 
@@ -53,6 +51,12 @@ Each folder contains its own `README.md` describing its contents in more detail.
 ## Data Request
 
 The data requested from STADIOEquities to carry out this project is detailed in [`requests/data_request.pdf`](requests/data_request.pdf).
+
+---
+
+## RAAIDD Log
+
+The project's Risks, Actions, Assumptions, Issues, Decisions, and Dependencies are documented in [`requests/raaidd_log.pdf`](requests/raaidd_log.pdf).
 
 ---
 
