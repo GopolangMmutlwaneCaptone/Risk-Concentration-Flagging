@@ -64,7 +64,3 @@ The project's Risks, Actions, Assumptions, Issues, Decisions, and Dependencies a
 
 <!-- Placeholder section. will link out to Preprocessing.MD, FeatureEngineering.MD, 
      Model1.MD, Model2.MD, etc. once SS2 begins -->
-
----
-
-# Risk-Concentration-Flagging
