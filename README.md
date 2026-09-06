@@ -46,7 +46,8 @@ This repository is organised as follows:
 | `experiments/setup/` | Experimental setup (configs, train/test split logic, etc.) |
 | `experiments/results/` | Experimental results (metrics, output tables, saved reports) |
 | `reports/` | Client-facing written reports and recommendations |
-| `requests/` | Client-facing data requests (e.g. data request PDF) |
+| `project-management/` | Internal project-tracking documentation (RAAIDD log) 
+| `requests/` | Client-facing data requests (data request PDF) |
 
 Each folder contains its own `README.md` describing its contents in more detail.
 
@@ -60,8 +61,7 @@ The data requested from STADIOEquities to carry out this project is detailed in 
 
 ## RAAIDD Log
 
-The project's Risks, Actions, Assumptions, Issues, Decisions, and Dependencies are documented in [`requests/raaidd_log.pdf`](requests/raaidd_log.pdf).
-
+The project's Risks, Actions, Assumptions, Issues, Decisions, and Dependencies are documented in [`project-management/raaidd_log.pdf`](project-management/raaidd_log.pdf).
 ---
 
 ## Related Documentation
