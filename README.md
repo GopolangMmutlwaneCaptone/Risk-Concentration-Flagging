@@ -42,7 +42,7 @@ This repository is organised as follows:
 | `src/models/` | Model training and inference code |
 | `src/evaluation/` | Statistical helper and model comparison scripts |
 | `src/visualisation/` | Charting and visualisation scripts |
-| `models/` | Saved trained model artifacts |
+| `artifacts/` | Saved trained model artifacts |
 | `experiments/setup/` | Experimental setup (configs, train/test split logic, etc.) |
 | `experiments/results/` | Experimental results (metrics, output tables, saved reports) |
 | `reports/` | Client-facing written reports and recommendations |
