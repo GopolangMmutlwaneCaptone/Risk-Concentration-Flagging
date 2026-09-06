@@ -36,13 +36,17 @@ This repository is organised as follows:
 | Folder | Purpose |
 |---|---|
 | `data/` | Raw and processed datasets used in this project |
-| `notebooks/` | Exploratory and preprocessing notebooks |
+| `notebooks/` | Exploratory data analysis notebooks |
+| `src/preprocessing/` | Data cleaning and preprocessing scripts |
+| `src/features/` | Feature engineering scripts |
 | `src/models/` | Model training and inference code |
 | `src/evaluation/` | Statistical helper and model comparison scripts |
 | `src/visualisation/` | Charting and visualisation scripts |
+| `models/` | Saved trained model artifacts |
 | `experiments/setup/` | Experimental setup (configs, train/test split logic, etc.) |
 | `experiments/results/` | Experimental results (metrics, output tables, saved reports) |
-| `requests/` | Client-facing deliverables (e.g. data request PDF) |
+| `reports/` | Client-facing written reports and recommendations |
+| `requests/` | Client-facing data requests (e.g. data request PDF) |
 
 Each folder contains its own `README.md` describing its contents in more detail.
 
