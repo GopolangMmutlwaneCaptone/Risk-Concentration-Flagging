@@ -46,7 +46,6 @@ This repository is organised as follows:
 | `experiments/setup/` | Experimental setup (configs, train/test split logic, etc.) |
 | `experiments/results/` | Experimental results (metrics, output tables, saved reports) |
 | `reports/` | Client-facing written reports and recommendations |
-| `project-management/` | Internal project-tracking documentation (RAAIDD log) 
 | `requests/` | Client-facing data requests (data request PDF) |
 
 Each folder contains its own `README.md` describing its contents in more detail.
@@ -61,7 +60,29 @@ The data requested from STADIOEquities to carry out this project is detailed in 
 
 ## RAAIDD Log
 
-The project's Risks, Actions, Assumptions, Issues, Decisions, and Dependencies are documented in [`project-management/raaidd_log.pdf`](project-management/raaidd_log.pdf).
+| Category | Description |
+|---|---|
+| **Risk** | Concentration flagging alone identifies at-risk clients but does not address the underlying reasons clients concentrate their holdings (e.g. chasing trending stocks, lack of investing knowledge); without pairing the model with client education or guidance, STADIOEquities may see limited real-world impact from flags alone. |
+| **Risk** | The proxy dataset used to validate this methodology (institutional holdings) differs meaningfully from STADIOEquities' actual retail client base, which may limit how well findings generalise once applied to real client data. |
+| **Risk** | If STADIOEquities does not have structured historical records of past client complaints, constructing a real-world validation label in a future direct application may be more difficult than anticipated. |
+| **Risk** | Client-level financial and behavioural data requested from STADIOEquities is sensitive under South Africa's POPIA regulations; any future direct application must ensure proper anonymisation and lawful basis for processing. |
+| **Action** | Explicitly document the proxy-to-real-client limitation in the final report, so STADIOEquities understands the current study validates a methodology rather than directly modelling its own clients. |
+| **Action** | Engage STADIOEquities stakeholders (e.g. client service and product teams) early in any future direct-application phase, to ensure flagged clients are met with appropriate, supportive interventions rather than purely automated action. |
+| **Action** | Maintain incremental, clearly-described Git commits throughout development, in line with the module's emphasis on commit history as a reviewable record of progress. |
+| **Action** | Empirically check the class balance of the constructed risk label before committing to accuracy as an evaluation metric, since concentration-driven losses are likely to be a minority outcome. |
+| **Assumption** | STADIOEquities' stated strategic priority of "protecting clients from unsuitable investment behaviour" reflects a genuine willingness to act on model outputs (e.g. through guidance or diversification prompts), not just awareness of the risk. |
+| **Assumption** | The proxy dataset reasonably approximates portfolio concentration behaviour relevant to STADIOEquities' retail investor risk problem, despite differences in investor type and scale. |
+| **Assumption** | STADIOEquities would, in a real engagement, be able to provide the client-level data described in the Part C data request, including anonymised holdings and transaction history. |
+| **Assumption** | Market benchmark data needed to construct the risk label is freely available and can be joined to the proxy dataset without licensing restrictions. |
+| **Issue** | Early in repository setup, a Git authentication mismatch (local credentials cached for a different GitHub account than the one hosting the repository) caused repeated push failures until diagnosed and resolved. |
+| **Issue** | A `.gitignore` exclusion rule was silently corrupted due to a text-encoding issue, causing it to fail without any visible error until identified through direct inspection. |
+| **Decision** | Risk Concentration Flagging was selected as the project's problem statement over six other candidate problems, based on alignment with STADIOEquities' stated strategic priorities, available public data, and literature support. |
+| **Decision** | The prediction target was defined at the portfolio level (concentration-weighted excess return), rather than based on a single holding in isolation, to ensure the model's outcome is mechanically tied to concentration itself, matching the real risk STADIOEquities is trying to address. |
+| **Dependency** | The future direct-application phase depends on STADIOEquities agreeing to and providing the data described in the Part C request. |
+| **Dependency** | Any client-facing intervention (e.g. guidance or diversification prompts) depends on STADIOEquities' product and client service teams building the operational workflow to act on model outputs. |
+| **Dependency** | The SS2 model comparison and recommendations report depend on the completion of preprocessing, feature engineering, and label construction using the proxy dataset. |
+| **Dependency** | Validating this methodology against real STADIOEquities outcomes (e.g. actual complaints or losses) depends on STADIOEquities maintaining structured, joinable records of these events. |
+
 ---
 
 ## Related Documentation
