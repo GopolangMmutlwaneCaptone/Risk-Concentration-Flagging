@@ -11,6 +11,7 @@
 - [Repository Structure](#repository-structure)
 - [Data Request](#data-request)
 - [RAAIDD Log](#raaidd-log)
+- [Literature Review](#literature-review)
 - [Related Documentation](#related-documentation)
 
 ## Motivation
@@ -47,6 +48,7 @@ This repository is organised as follows:
 | `experiments/results/` | Experimental results (metrics, output tables, saved reports) |
 | `reports/` | Client-facing written reports and recommendations |
 | `requests/` | Client-facing data requests (data request PDF) |
+| `literature-review/` | SS2 literature review and public dataset description |
 
 Each folder contains its own `README.md` describing its contents in more detail.
 
@@ -82,6 +84,12 @@ The data requested from STADIOEquities to carry out this project is detailed in 
 | **Dependency** | Any client-facing intervention (e.g. guidance or diversification prompts) depends on STADIOEquities' product and client service teams building the operational workflow to act on model outputs. |
 | **Dependency** | The SS2 model comparison and recommendations report depend on the completion of preprocessing, feature engineering, and label construction using the proxy dataset. |
 | **Dependency** | Validating this methodology against real STADIOEquities outcomes (e.g. actual complaints or losses) depends on STADIOEquities maintaining structured, joinable records of these events. |
+
+---
+
+## Literature Review
+
+A review of three related publications and a description of the publicly available dataset used to validate this study's methodology is provided in [`literature-review/Related_work_and_data_description.pdf`](literature-review/Related_work_and_data_description.pdf).
 
 ---
 
