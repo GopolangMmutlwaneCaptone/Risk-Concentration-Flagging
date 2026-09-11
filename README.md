@@ -1,4 +1,4 @@
-# stadioequities: Client Portfolio Risk Concentration Flagging
+# STADIOEQUITIES: Client Portfolio Risk Concentration Flagging
 
 > A data science project to help STADIOEquities identify clients at risk of dangerous portfolio concentration before it results in financial loss, using an engineered concentration metric and supervised classification.
 
