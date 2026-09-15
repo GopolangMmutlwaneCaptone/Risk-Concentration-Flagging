@@ -226,3 +226,5 @@ artifacts/*
 .streamlit/secrets.toml
 
 requests/data_request.docx
+
+literature-review/Related work and data description.docx
