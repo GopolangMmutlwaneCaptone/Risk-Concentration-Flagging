@@ -13,7 +13,7 @@ This document describes the preprocessing pipeline used to prepare the SEC 13F-H
 2. Install dependencies: `pip install -r requirements.txt`
 3. Open `preprocessing.ipynb` and run all cells in order, top to bottom.
 4. **Expected runtime:** the CUSIP-to-ticker mapping step (via the OpenFIGI API) is the most time-consuming part of this pipeline, and can take several hours on a first run, due to the API's rate limits (10 CUSIPs per request, 25 requests per 60 seconds on the free tier) and observed network instability at this scale. The notebook checkpoints progress throughout, so an interrupted run can be resumed without starting over. On subsequent runs, if the mapping and price-download output files already exist in `data/processed/`, those steps can be skipped by loading the existing files directly rather than re-running the API calls.
-5. Outputs are saved to `data/processed/`, including the final `equity_close_prices.csv`, the file that Feature Engineering builds on.
+5. Outputs are saved to `data/processed/`, including the final `equity_close_prices_clean.csv`, the file that Feature Engineering builds on.
 
 ## What This Pipeline Does
 
@@ -27,7 +27,7 @@ This document describes the preprocessing pipeline used to prepare the SEC 13F-H
 8. **Maps each CUSIP to a ticker and security type** via the OpenFIGI API, since the raw data provides only CUSIP, a regulatory identifier, not a tradeable ticker symbol. A retry pass is run on initial failures to rule out network-related causes before accepting them as genuine gaps.
 9. **Filters to genuine equity instruments** (Common Stock, Depositary Receipt, REIT, Preferred Stock), excluding mutual funds, bonds, and structured debt products, which are not the unit of analysis this study measures.
 10. **Downloads historical price data** for all mapped equity tickers, plus the S&P 500 benchmark, via `yfinance`.
-11. **Consolidates and filters** the downloaded prices into the final output, `equity_close_prices.csv`.
+11. **Consolidates** the downloaded prices, then removes tickers with no usable price data at all (see Limitations), producing the final output, `equity_close_prices_clean.csv`.
 
 ## Key Data Quality Issues Found and Resolved
 
