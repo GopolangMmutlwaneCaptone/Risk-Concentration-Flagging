@@ -95,4 +95,6 @@ A review of three related publications and a description of the publicly availab
 
 ## Related Documentation
 
-- [Preprocessing](src/preprocessing/Preprocessing.MD) — data cleaning, CUSIP-to-ticker mapping, and price data preparation for the SS2 public proxy dataset
+- [Preprocessing](src/preprocessing/Preprocessing.MD): data cleaning, CUSIP-to-ticker mapping, and price data preparation for the SS2 public proxy dataset
+- [Preprocessing](src/preprocessing/Preprocessing.MD): data cleaning, CUSIP-to-ticker mapping, and price data preparation for the SS2 public proxy dataset
+- [Feature Engineering](src/features/FeatureEngineering.MD): portfolio concentration features and risk label construction
