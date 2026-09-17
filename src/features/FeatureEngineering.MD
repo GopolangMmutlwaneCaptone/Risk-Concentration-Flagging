@@ -1,3 +1,34 @@
+# Feature Engineering
+
+This document describes the feature engineering pipeline used to build the modelling dataset from the preprocessed SEC 13F holdings data, computing portfolio concentration features and constructing the binary risk label.
+
+## File
+
+**Notebook:** [`src/features/feature_engineering.ipynb`](feature_engineering.ipynb)
+**Input:** `data/processed/cleaned_holdings.csv`, `cusip_ticker_sector_mapping_final.csv`, `equity_close_prices_clean.csv`, `sp500_benchmark.csv` (all produced by [Preprocessing](../preprocessing/Preprocessing.MD))
+**Output:** `data/processed/model_features.csv`, the final table used for model training
+
+## How to Use This Notebook
+
+1. Ensure `preprocessing.ipynb` has been run first, and its outputs exist in `data/processed/`.
+2. Open `feature_engineering.ipynb` and run all cells in order, top to bottom.
+3. **Expected runtime:** sourcing industry sector via `yfinance` ticker metadata is the slowest step (roughly 60-90 minutes for ~3,451 tickers). A checkpointed results file (`sector_mapping.csv`) is saved, so this step does not need to be repeated once completed.
+4. The label-construction step also takes a few minutes, due to the nested loop over holdings within each portfolio.
+
+## What This Pipeline Does
+
+1. **Sources industry sector and industry data** for each equity ticker via `yfinance` ticker metadata, since `security_type` (from preprocessing) classifies instrument type, not industry.
+2. **Merges** cleaned holdings data with the CUSIP-to-ticker mapping and sourced sector data, restricting to genuine equity holdings with usable price data.
+3. **Reshapes to long format**, one row per institution-holding-quarter, retaining only non-zero share holdings.
+4. **Computes each holding's dollar value** at each quarter-end.
+5. **Computes four portfolio-level features per institution per quarter:** HHI, top-holding percentage, number of distinct holdings, and sector HHI.
+6. **Constructs the binary risk label**, based on each portfolio's concentration-weighted excess return relative to the S&P 500 over the following quarter.
+
+## Label Construction, in Detail
+
+For each institution's portfolio at each quarter-end, the label is computed as:
+*weighted_excess_return = Σ (holding_weight × (holding_forward_return − benchmark_forward_return))*
+
 
 where `holding_forward_return` is each holding's price return from the current quarter-end to the next quarter-end, and `benchmark_forward_return` is the S&P 500's return over the same period. This makes concentration mechanically part of the outcome: a portfolio heavily concentrated in a stock that underperforms the market will show a large negative weighted excess return, while the same stock's decline in a diversified portfolio would barely move the result.
 
