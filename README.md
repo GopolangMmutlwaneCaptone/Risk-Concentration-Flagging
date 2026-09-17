@@ -26,7 +26,8 @@ Data science offers a practical means of identifying concentration risk earlier 
 ---
 
 ## Problem Statement
-Despite STADIOEquities' current approach of identifying unsuitable investment behaviour only after a client has already suffered a loss and lodged a complaint, it remains unclear whether portfolio concentration measures, such as the Herfindahl-Hirschman Index, top-holding percentage, number of distinct holdings, and sector exposure, can be used to predict which portfolios are at elevated risk of a concentration-amplified loss relative to a market benchmark. Therefore, this study aims to build and evaluate a predictive model using SEC Form 13F institutional holdings data, a publicly available proxy for client portfolio behaviour, in order to support earlier, proactive intervention by STADIOEquities before losses occur.
+
+Despite STADIOEquities' current approach of identifying unsuitable investment behaviour only after a client has already suffered a loss and lodged a complaint, it remains unclear how portfolio concentration measures, such as the Herfindahl-Hirschman Index, top-holding percentage, number of distinct holdings, and sector exposure, can best be used within a predictive model to identify which portfolios are at elevated risk of a concentration-amplified loss relative to a market benchmark. Therefore, this study aims to build and evaluate a predictive model using client portfolio and transaction data requested from STADIOEquities, in order to support earlier, proactive intervention before losses occur.
 
 ---
 
@@ -56,7 +57,7 @@ Each folder contains its own `README.md` describing its contents in more detail.
 
 ## Data Request
 
-The data requested from STADIOEquities to carry out this project is detailed in [`requests/data_request.pdf`](requests/data_request.pdf).
+The data requested from STADIOEquities to carry out this project is detailed in [`requests/data_request.pdf`](requesSts/data_request.pdf).
 
 ---
 
