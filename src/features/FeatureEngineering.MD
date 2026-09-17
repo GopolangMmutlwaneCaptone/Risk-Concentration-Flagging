@@ -29,7 +29,6 @@ This document describes the feature engineering pipeline used to build the model
 For each institution's portfolio at each quarter-end, the label is computed as:
 *weighted_excess_return = Σ (holding_weight × (holding_forward_return − benchmark_forward_return))*
 
-
 where `holding_forward_return` is each holding's price return from the current quarter-end to the next quarter-end, and `benchmark_forward_return` is the S&P 500's return over the same period. This makes concentration mechanically part of the outcome: a portfolio heavily concentrated in a stock that underperforms the market will show a large negative weighted excess return, while the same stock's decline in a diversified portfolio would barely move the result.
 
 **Threshold selection:** the problem statement's methodology originally anticipated a -15% threshold as a starting estimate. This was checked empirically against the actual computed distribution of `weighted_excess_return` (mean 0.01, std 0.05, min -1.04, max 0.79) before being finalised, per the commitment made at the problem-statement stage to verify rather than assume this figure. At -15%, only 0.7% of institution-quarters (134 of 20,244) were flagged positive, too rare to support meaningful model training. Several thresholds were tested:
