@@ -41,6 +41,10 @@ This document describes the preprocessing pipeline used to prepare the SEC 13F-H
 | CUSIP-to-ticker match ambiguity | A single CUSIP can return many possible OpenFIGI matches across different exchanges and currencies; naively taking the first result risked selecting a non-primary listing (e.g. ABB Ltd's first match was a German exchange ADR, not its actual US-tradeable ticker, `ABBNY`) | A selection function prioritises US-listed common stock, then any US listing, then falls back to the first available result |
 | Field naming | OpenFIGI's `securityType2` field (e.g. "Common Stock", "REIT") was initially stored under the name `sector`, which is misleading, since it classifies instrument type, not industry (e.g. Technology, Financials) | Renamed to `security_type` throughout. Genuine industry sector is not provided by this mapping and must be sourced separately in Feature Engineering (e.g. via a GICS mapping or `yfinance` ticker metadata) |
 
+## Visualisations
+
+Three supporting visualisations are produced in the notebook: CUSIP-to-ticker mapping outcome (mapped vs. unmapped), the distribution of retained equity holdings by security type, and price data availability (illustrating the survivorship bias limitation discussed below).
+
 ## Limitations
 
 - **CUSIP mapping coverage:** approximately two-thirds of unique CUSIPs could not be resolved to a ticker via OpenFIGI, most commonly because the security was delisted, acquired, or otherwise absent from OpenFIGI's identifier database (confirmed via a retry pass, which recovered only a small fraction of the original failures, ruling out network instability as the primary cause). However, unmapped securities were found to represent a disproportionately smaller share of total holding volume than mapped securities, suggesting they are predominantly minor positions rather than dominant holdings.
