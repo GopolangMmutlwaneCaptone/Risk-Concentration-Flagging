@@ -66,8 +66,8 @@ The test set's lower positive rate (77 positive cases) is a known limitation of 
 
 ## Visualisations
 
-- `reports/model1_coefficients.png`: feature coefficient magnitudes and directions
-- `reports/model1_confusion_matrix.png`: test set confusion matrix
+- `reports/charts/model1_coefficients.png`: feature coefficient magnitudes and directions
+- `reports/charts/model1_confusion_matrix.png`: test set confusion matrix
 
 ## Limitations
 
