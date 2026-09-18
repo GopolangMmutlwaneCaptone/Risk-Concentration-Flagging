@@ -100,3 +100,6 @@ A review of three related publications and a description of the publicly availab
 - [Feature Engineering](src/features/FeatureEngineering.MD): portfolio concentration features and risk label construction
 - [Model 1: Logistic Regression](src/models/Model1_Logistic_Regression.MD): interpretable baseline model, technique, and hyperparameters
 - [Model 1 Performance](experiments/results/Model1_Logistic_Regression_Performance.MD): Model 1 test-set metrics and results
+- [Model 2: XGBoost](src/models/Model2_XGBoost.MD): gradient-boosted ensemble model, technique, and hyperparameters
+- [Model 2 Performance](experiments/results/Model2_XGBoost_Performance.MD): Model 2 test-set metrics and results
+- [Model Comparison](experiments/results/Comparison.MD): side-by-side comparison and model recommendation
