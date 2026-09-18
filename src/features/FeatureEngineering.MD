@@ -5,15 +5,17 @@ This document describes the feature engineering pipeline used to build the model
 ## File
 
 **Notebook:** [`src/features/feature_engineering.ipynb`](feature_engineering.ipynb)
+**Dependencies:** [`src/features/requirements.txt`](requirements.txt)
 **Input:** `data/processed/cleaned_holdings.csv`, `cusip_ticker_sector_mapping_final.csv`, `equity_close_prices_clean.csv`, `sp500_benchmark.csv` (all produced by [Preprocessing](../preprocessing/Preprocessing.MD))
 **Output:** `data/processed/model_features.csv`, the final table used for model training
 
 ## How to Use This Notebook
 
 1. Ensure `preprocessing.ipynb` has been run first, and its outputs exist in `data/processed/`.
-2. Open `feature_engineering.ipynb` and run all cells in order, top to bottom.
-3. **Expected runtime:** sourcing industry sector via `yfinance` ticker metadata is the slowest step (roughly 60-90 minutes for ~3,451 tickers, due to one API call per ticker with no batching). A checkpointed results file (`sector_mapping.csv`) is saved, so this step does not need to be repeated once completed.
-4. The label-construction step (computing forward returns for every holding in every institution-quarter) is also computationally heavier than the feature calculations, given the nested loop over holdings within each portfolio, but completes in a few minutes.
+2. Install dependencies: `pip install -r requirements.txt`
+3. Open `feature_engineering.ipynb` and run all cells in order, top to bottom.
+4. **Expected runtime:** sourcing industry sector via `yfinance` ticker metadata is the slowest step (roughly 60-90 minutes for ~3,451 tickers, due to one API call per ticker with no batching). A checkpointed results file (`sector_mapping.csv`) is saved, so this step does not need to be repeated once completed.
+5. The label-construction step (computing forward returns for every holding in every institution-quarter) is also computationally heavier than the feature calculations, given the nested loop over holdings within each portfolio, but completes in a few minutes.
 
 ## What This Pipeline Does
 
