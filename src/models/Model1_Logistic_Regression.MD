@@ -5,14 +5,16 @@ This document describes Model 1, a Logistic Regression classifier predicting con
 ## File
 
 **Notebook:** [`src/models/model1_logistic_regression.ipynb`](model1_logistic_regression.ipynb)
+**Dependencies:** [`src/models/requirements.txt`](requirements.txt)
 **Input:** `data/processed/model_features.csv` (produced by [Feature Engineering](../features/FeatureEngineering.MD))
 **Output:** `artifacts/model1_logistic_regression.pkl`, `artifacts/model1_scaler.pkl`
 
 ## How to Use This Notebook
 
 1. Ensure `feature_engineering.ipynb` has been run first, and `model_features.csv` exists in `data/processed/`.
-2. Open `model1_logistic_regression.ipynb` and run all cells in order, top to bottom.
-3. Runs in under a minute; no external API calls or long-running steps.
+2. Install dependencies: `pip install -r requirements.txt`
+3. Open `model1_logistic_regression.ipynb` and run all cells in order, top to bottom.
+4. Runs in under a minute; no external API calls or long-running steps.
 
 ## Technique
 
@@ -27,7 +29,7 @@ A **time-based split** is used rather than a random split, given the panel (quar
 | Train | 15,151 | 5.1% |
 | Test | 5,093 | 1.5% |
 
-The test set's lower positive rate (76 positive cases) is a known limitation of time-based splitting on an already-imbalanced label; metrics on the positive class should be interpreted with this small sample size in mind.
+The test set's lower positive rate (77 positive cases) is a known limitation of time-based splitting on an already-imbalanced label; metrics on the positive class should be interpreted with this small sample size in mind.
 
 ## Hyperparameters
 
@@ -69,5 +71,5 @@ The test set's lower positive rate (76 positive cases) is a known limitation of 
 
 ## Limitations
 
-- The low positive-class count in the test set (76 cases) means precision/recall figures carry meaningful sampling uncertainty; a small number of additional correct or incorrect predictions would shift these metrics noticeably.
+- The low positive-class count in the test set (77 cases) means precision/recall figures carry meaningful sampling uncertainty; a small number of additional correct or incorrect predictions would shift these metrics noticeably.
 - `hhi` and `top_holding_pct` were retained together despite high collinearity, prioritising time constraints over feature engineering refinement (e.g. dropping or combining correlated features). This does not affect the model's overall predictive performance (ROC-AUC), only the individual interpretability of the `hhi` coefficient specifically.
