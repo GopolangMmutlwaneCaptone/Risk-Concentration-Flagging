@@ -12,21 +12,26 @@ This document describes the feature engineering pipeline used to build the model
 
 1. Ensure `preprocessing.ipynb` has been run first, and its outputs exist in `data/processed/`.
 2. Open `feature_engineering.ipynb` and run all cells in order, top to bottom.
-3. **Expected runtime:** sourcing industry sector via `yfinance` ticker metadata is the slowest step (roughly 60-90 minutes for ~3,451 tickers). A checkpointed results file (`sector_mapping.csv`) is saved, so this step does not need to be repeated once completed.
-4. The label-construction step also takes a few minutes, due to the nested loop over holdings within each portfolio.
+3. **Expected runtime:** sourcing industry sector via `yfinance` ticker metadata is the slowest step (roughly 60-90 minutes for ~3,451 tickers, due to one API call per ticker with no batching). A checkpointed results file (`sector_mapping.csv`) is saved, so this step does not need to be repeated once completed.
+4. The label-construction step (computing forward returns for every holding in every institution-quarter) is also computationally heavier than the feature calculations, given the nested loop over holdings within each portfolio, but completes in a few minutes.
 
 ## What This Pipeline Does
 
-1. **Sources industry sector and industry data** for each equity ticker via `yfinance` ticker metadata, since `security_type` (from preprocessing) classifies instrument type, not industry.
+1. **Sources industry sector and industry data** for each equity ticker via `yfinance` ticker metadata (`.info`), since the preprocessing pipeline's `security_type` field classifies instrument type (e.g. Common Stock, REIT), not industry (e.g. Technology, Financials).
 2. **Merges** cleaned holdings data with the CUSIP-to-ticker mapping and sourced sector data, restricting to genuine equity holdings with usable price data.
 3. **Reshapes to long format**, one row per institution-holding-quarter, retaining only non-zero share holdings.
-4. **Computes each holding's dollar value** at each quarter-end.
-5. **Computes four portfolio-level features per institution per quarter:** HHI, top-holding percentage, number of distinct holdings, and sector HHI.
-6. **Constructs the binary risk label**, based on each portfolio's concentration-weighted excess return relative to the S&P 500 over the following quarter.
+4. **Computes each holding's dollar value** at each quarter-end, using the closest available trading price on or before that date.
+5. **Computes four portfolio-level features per institution per quarter:**
+   - **HHI** (Herfindahl-Hirschman Index): sum of squared portfolio weights, a standard measure of concentration
+   - **Top-holding percentage**: the largest single position's weight in the portfolio
+   - **Number of distinct holdings**
+   - **Sector HHI**: HHI computed at the sector level, measuring sector concentration rather than individual-stock concentration
+6. **Constructs the binary risk label**: for each institution-quarter, computes the portfolio's concentration-weighted excess return over the *following* quarter relative to the S&P 500 benchmark, then flags the portfolio as high-risk (label = 1) if this weighted excess return falls below a defined threshold.
 
 ## Label Construction, in Detail
 
 For each institution's portfolio at each quarter-end, the label is computed as:
+
 *weighted_excess_return = Σ (holding_weight × (holding_forward_return − benchmark_forward_return))*
 
 where `holding_forward_return` is each holding's price return from the current quarter-end to the next quarter-end, and `benchmark_forward_return` is the S&P 500's return over the same period. This makes concentration mechanically part of the outcome: a portfolio heavily concentrated in a stock that underperforms the market will show a large negative weighted excess return, while the same stock's decline in a diversified portfolio would barely move the result.
@@ -52,7 +57,13 @@ where `holding_forward_return` is each holding's price return from the current q
 
 ## Visualisations
 
-Three supporting visualisations are produced in the notebook: the distribution of `weighted_excess_return` with the selected threshold marked, the resulting label's class balance, and a scatter of HHI against excess return, which shows loss cases (label = 1) skewing toward higher concentration, consistent with this study's core hypothesis.
+Five supporting visualisations are produced in the notebook:
+
+- **Excess return distribution:** the distribution of `weighted_excess_return` with the selected -5% threshold marked
+- **Threshold selection:** positive case count at each candidate threshold, showing why -15% was too rare to support model training
+- **NaN poisoning fix:** NaN label count before vs. after the explicit `isna()` fix (1,610 to 0)
+- **Label class balance:** the resulting label's distribution (4.2% positive)
+- **HHI vs. excess return:** a scatter showing loss cases (label = 1) skewing toward higher concentration, consistent with this study's core hypothesis
 
 ## Limitations
 
