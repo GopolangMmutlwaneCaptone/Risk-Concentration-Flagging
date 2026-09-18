@@ -5,13 +5,14 @@ This document describes Model 2, an XGBoost classifier predicting concentration-
 ## File
 
 **Notebook:** [`src/models/model2_xgboost.ipynb`](model2_xgboost.ipynb)
+**Dependencies:** [`src/models/requirements.txt`](requirements.txt)
 **Input:** `data/processed/model_features.csv` (produced by [Feature Engineering](../features/FeatureEngineering.MD))
 **Output:** `artifacts/model2_xgboost.pkl`
 
 ## How to Use This Notebook
 
 1. Ensure `feature_engineering.ipynb` has been run first, and `model_features.csv` exists in `data/processed/`.
-2. Install `xgboost` if not already available (`pip install -r requirements.txt`).
+2. Install dependencies, including `xgboost` (`pip install -r requirements.txt`).
 3. Open `model2_xgboost.ipynb` and run all cells in order, top to bottom.
 4. Runs in under a minute; no external API calls or long-running steps.
 
@@ -72,4 +73,4 @@ The identical time-based split used in Model 1 is applied here, ensuring a fair,
 ## Limitations
 
 - Hyperparameters were set to reasonable standard values rather than tuned via cross-validation or grid search, due to time constraints. A tuned model may achieve improved precision without sacrificing the current recall level.
-- As with Model 1, the small number of positive cases in the test set (76) means precision/recall figures carry meaningful sampling uncertainty.
+- As with Model 1, the small number of positive cases in the test set (77) means precision/recall figures carry meaningful sampling uncertainty.
