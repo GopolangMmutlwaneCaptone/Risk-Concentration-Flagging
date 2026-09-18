@@ -23,11 +23,12 @@ This document describes the feature engineering pipeline used to build the model
 2. **Merges** cleaned holdings data with the CUSIP-to-ticker mapping and sourced sector data, restricting to genuine equity holdings with usable price data.
 3. **Reshapes to long format**, one row per institution-holding-quarter, retaining only non-zero share holdings.
 4. **Computes each holding's dollar value** at each quarter-end, using the closest available trading price on or before that date.
-5. **Computes four portfolio-level features per institution per quarter:**
+5. **Computes five portfolio-level features per institution per quarter:**
    - **HHI** (Herfindahl-Hirschman Index): sum of squared portfolio weights, a standard measure of concentration
    - **Top-holding percentage**: the largest single position's weight in the portfolio
    - **Number of distinct holdings**
    - **Sector HHI**: HHI computed at the sector level, measuring sector concentration rather than individual-stock concentration
+   - **Total portfolio value**: the portfolio's total dollar value at that quarter-end
 6. **Constructs the binary risk label**: for each institution-quarter, computes the portfolio's concentration-weighted excess return over the *following* quarter relative to the S&P 500 benchmark, then flags the portfolio as high-risk (label = 1) if this weighted excess return falls below a defined threshold.
 
 ## Label Construction, in Detail
