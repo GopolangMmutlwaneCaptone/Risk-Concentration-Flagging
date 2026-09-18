@@ -57,7 +57,7 @@ Each folder contains its own `README.md` describing its contents in more detail.
 
 ## Data Request
 
-The data requested from STADIOEquities to carry out this project is detailed in [`requests/data_request.pdf`](requesSts/data_request.pdf).
+The data requested from STADIOEquities to carry out this project is detailed in [`requests/data_request.pdf`](requests/data_request.pdf).
 
 ---
 
