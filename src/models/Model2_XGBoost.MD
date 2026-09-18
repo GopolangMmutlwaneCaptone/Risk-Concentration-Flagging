@@ -11,13 +11,13 @@ This document describes Model 2, an XGBoost classifier predicting concentration-
 ## How to Use This Notebook
 
 1. Ensure `feature_engineering.ipynb` has been run first, and `model_features.csv` exists in `data/processed/`.
-2. Install `xgboost` if not already available (`pip install xgboost`).
+2. Install `xgboost` if not already available (`pip install -r requirements.txt`).
 3. Open `model2_xgboost.ipynb` and run all cells in order, top to bottom.
 4. Runs in under a minute; no external API calls or long-running steps.
 
 ## Technique
 
-**XGBoost**, a gradient-boosted decision tree ensemble, was selected as the second model both for its typically strong performance on tabular data with class imbalance, and specifically because it is far more robust to correlated features than a linear model, directly relevant given the multicollinearity identified between `hhi` and `top_holding_pct` in Model 1 (see [Model1.MD](Model1.MD)). Chen et al. (2023), cited in this project's literature review, also compared tree-ensemble methods (Random Forest, XGBoost, CatBoost) on 13F-derived data, providing direct precedent for this choice.
+**XGBoost**, a gradient-boosted decision tree ensemble, was selected as the second model both for its typically strong performance on tabular data with class imbalance, and specifically because it is far more robust to correlated features than a linear model, directly relevant given the multicollinearity identified between `hhi` and `top_holding_pct` in Model 1 (see [Model1_Logistic_Regression.MD](Model1_Logistic_Regression.MD)). Chen et al. (2023), cited in this project's literature review, also compared tree-ensemble methods (Random Forest, XGBoost, CatBoost) on 13F-derived data, providing direct precedent for this choice.
 
 ## Data Split
 
@@ -61,12 +61,13 @@ The identical time-based split used in Model 1 is applied here, ensuring a fair,
 | Precision (positive class) | 0.06 | 0.08 |
 | Accuracy | 0.78 | 0.82 |
 
-**Overall ranking ability (ROC-AUC) is nearly identical between the two models.** Both correctly prioritise recall over precision as a result of their respective imbalance-correction mechanisms, catching the large majority of genuinely at-risk portfolios at the cost of a high false-positive rate, consistent with the reasoning in Model1.MD (missing genuine risk is more costly than an unnecessary review, given this project's purpose). Model 2's main advantage over Model 1 is not raw predictive performance, but a more correct and interpretable picture of which features actually drive risk (`hhi` as the dominant signal, rather than the confusing, collinearity-driven result in Model 1). A full, formal comparison is presented in [Comparison.MD](../../experiments/results/Comparison.MD) (Part C).
+**Overall ranking ability (ROC-AUC) is nearly identical between the two models.** Both correctly prioritise recall over precision as a result of their respective imbalance-correction mechanisms, catching the large majority of genuinely at-risk portfolios at the cost of a high false-positive rate, consistent with the reasoning in Model1_Logistic_Regression.MD (missing genuine risk is more costly than an unnecessary review, given this project's purpose). Model 2's main advantage over Model 1 is not raw predictive performance, but a more correct and interpretable picture of which features actually drive risk (`hhi` as the dominant signal, rather than the confusing, collinearity-driven result in Model 1). A full, formal comparison, including a side-by-side chart of both models' metrics, is presented in [Comparison.MD](../../experiments/results/Comparison.MD) (Part C).
 
 ## Visualisations
 
 - `reports/model2_feature_importance.png`: feature importance ranking
 - `reports/model2_confusion_matrix.png`: test set confusion matrix
+- `reports/model_comparison.png`: side-by-side comparison of Model 1 and Model 2 test-set metrics (generated at the end of this notebook)
 
 ## Limitations
 
