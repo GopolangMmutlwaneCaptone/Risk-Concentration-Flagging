@@ -66,9 +66,9 @@ The identical time-based split used in Model 1 is applied here, ensuring a fair,
 
 ## Visualisations
 
-- `reports/model2_feature_importance.png`: feature importance ranking
-- `reports/model2_confusion_matrix.png`: test set confusion matrix
-- `reports/model_comparison.png`: side-by-side comparison of Model 1 and Model 2 test-set metrics (generated at the end of this notebook)
+- `reports/charts/model2_feature_importance.png`: feature importance ranking
+- `reports/charts/model2_confusion_matrix.png`: test set confusion matrix
+- `reports/charts/model_comparison.png`: side-by-side comparison of Model 1 and Model 2 test-set metrics (generated at the end of this notebook)
 
 ## Limitations
 
