@@ -20,7 +20,7 @@ Both notebooks must be run first, in either order, since they train and evaluate
 | Recall (positive class) | 0.95 | 0.95 |
 | F1-score (positive class) | **0.14** | 0.12 |
 
-![Model comparison chart](../../reports/model_comparison.png)
+![Model comparison chart](../../reports/charts/model_comparison.png)
 
 ## Confusion Matrices
 
