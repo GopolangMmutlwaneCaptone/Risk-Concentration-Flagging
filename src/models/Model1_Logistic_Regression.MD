@@ -26,10 +26,10 @@ A **time-based split** is used rather than a random split, given the panel (quar
 
 | Split | Rows | Positive Rate |
 |---|---|---|
-| Train | 15,151 | 5.1% |
-| Test | 5,093 | 1.5% |
+| Train | 15,151 | 4.8% |
+| Test | 5,093 | 2.2% |
 
-The test set's lower positive rate (77 positive cases) is a known limitation of time-based splitting on an already-imbalanced label; metrics on the positive class should be interpreted with this small sample size in mind.
+The test set's lower positive rate (114 positive cases) is a known limitation of time-based splitting on an already-imbalanced label; metrics on the positive class should be interpreted with this sample size in mind.
 
 ## Hyperparameters
 
@@ -45,24 +45,24 @@ The test set's lower positive rate (77 positive cases) is a known limitation of 
 
 | Feature | Coefficient | Direction |
 |---|---|---|
-| `top_holding_pct` | +1.92 | Higher single-stock concentration → higher predicted risk |
-| `total_value` | +0.61 | Larger portfolios → higher predicted risk |
-| `sector_hhi` | +0.31 | Higher sector concentration → higher predicted risk |
-| `num_holdings` | -0.13 | More distinct holdings → lower predicted risk |
-| `hhi` | -0.98 | Counter-intuitive; see below |
+| `top_holding_pct` | +1.58 | Higher single-stock concentration → higher predicted risk |
+| `sector_hhi` | +0.29 | Higher sector concentration → higher predicted risk |
+| `total_value` | +0.04 | Negligible; portfolio size shows little independent effect once concentration is accounted for |
+| `num_holdings` | -0.12 | More distinct holdings → lower predicted risk |
+| `hhi` | -0.61 | Counter-intuitive; see below |
 
-**`hhi`'s negative coefficient is a multicollinearity artefact, not a genuine finding.** `hhi` and `top_holding_pct` are correlated at 0.96 (confirmed via direct correlation analysis), since a portfolio's largest holding is the dominant term in its own HHI calculation. With two features this strongly correlated, Logistic Regression cannot cleanly separate their individual effects: `top_holding_pct` absorbs the real, positive relationship, while `hhi`'s coefficient is pushed into an unstable, compensating direction. This is a well-understood limitation of linear models under multicollinearity, and is expected to be less pronounced in Model 2 (XGBoost), a tree-based model generally more robust to correlated features.
+**`hhi`'s negative coefficient is a multicollinearity artefact, not a genuine finding.** `hhi` and `top_holding_pct` are correlated at 0.96 (confirmed via direct correlation analysis), since a portfolio's largest holding is the dominant term in its own HHI calculation. With two features this strongly correlated, Logistic Regression cannot cleanly separate their individual effects: `top_holding_pct` absorbs the real, positive relationship, while `hhi`'s coefficient is pushed into an unstable, compensating direction. Both features are retained, since removing either would discard genuine predictive information; this instability is a well-understood limitation of linear models under multicollinearity, and is far less pronounced in Model 2 (XGBoost), a tree-based model robust to correlated features.
 
 ## Performance Summary
 
 | Metric | Value |
 |---|---|
-| ROC-AUC | 0.935 |
-| Recall (positive class) | 0.95 |
-| Precision (positive class) | 0.08 |
-| Accuracy | 0.82 |
+| ROC-AUC | 0.919 |
+| Recall (positive class) | 0.88 |
+| Precision (positive class) | 0.12 |
+| Accuracy | 0.85 |
 
-**High recall, low precision is a deliberate outcome of `class_weight="balanced"`, not an unaddressed weakness.** The model correctly identifies 73 of 77 genuinely at-risk portfolios in the test set, at the cost of 892 false positives. Given this project's purpose, flagging portfolios for STADIOEquities to review before a loss occurs, missing a genuinely at-risk client (a false negative) is more costly than an unnecessary review (a false positive), making this trade-off directionally appropriate. A full comparison against Model 2's metrics, and discussion of whether this trade-off should be tuned further, is presented in [Comparison.MD](../../experiments/results/Comparison.MD) (Part C).
+**High recall, low precision is a deliberate outcome of `class_weight="balanced"`, not an unaddressed weakness.** The model correctly identifies 100 of 114 genuinely at-risk portfolios in the test set, at the cost of 758 false positives. Given this project's purpose, flagging portfolios for STADIOEquities to review before a loss occurs, missing a genuinely at-risk client (a false negative) is more costly than an unnecessary review (a false positive), making this trade-off directionally appropriate. A full comparison against Model 2's metrics is presented in [Comparison.MD](../../experiments/results/Comparison.MD) (Part C).
 
 ## Visualisations
 
@@ -71,5 +71,5 @@ The test set's lower positive rate (77 positive cases) is a known limitation of 
 
 ## Limitations
 
-- The low positive-class count in the test set (77 cases) means precision/recall figures carry meaningful sampling uncertainty; a small number of additional correct or incorrect predictions would shift these metrics noticeably.
-- `hhi` and `top_holding_pct` were retained together despite high collinearity, prioritising time constraints over feature engineering refinement (e.g. dropping or combining correlated features). This does not affect the model's overall predictive performance (ROC-AUC), only the individual interpretability of the `hhi` coefficient specifically.
+- The positive-class count in the test set (114 cases) means precision/recall figures carry sampling uncertainty; a modest number of additional correct or incorrect predictions could shift these metrics noticeably.
+- `hhi` and `top_holding_pct` remain correlated at 0.96, limiting the individual interpretability of the `hhi` coefficient specifically, though the model's overall predictive performance (ROC-AUC) is unaffected.
