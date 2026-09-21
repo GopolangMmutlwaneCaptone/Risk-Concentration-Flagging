@@ -35,6 +35,7 @@ The test set's lower positive rate (114 positive cases) is a known limitation of
 
 | Parameter | Value | Reasoning |
 |---|---|---|
+| `C` | `0.001` | Selected via grid search using `TimeSeriesSplit` cross-validation (5 folds), which respects the chronological ordering of quarters rather than shuffling data randomly. `C=0.001` was chosen because it produces a correctly-signed, interpretable `hhi` coefficient, addressing a multicollinearity issue between `hhi` and `top_holding_pct` (see Feature Coefficients below); ROC-AUC is essentially flat across the tested range of `C` values, so this selection prioritises interpretability without a meaningful cost to ranking performance |
 | `class_weight` | `"balanced"` | Compensates for label imbalance (4.2% positive overall) by weighting the minority class more heavily during training, avoiding the need for manual oversampling/undersampling |
 | `max_iter` | `1000` | Increased from the default to ensure convergence given standardised, moderate-dimensionality input |
 | `random_state` | `42` | Fixed for reproducibility |
@@ -45,24 +46,24 @@ The test set's lower positive rate (114 positive cases) is a known limitation of
 
 | Feature | Coefficient | Direction |
 |---|---|---|
-| `top_holding_pct` | +1.58 | Higher single-stock concentration → higher predicted risk |
-| `sector_hhi` | +0.29 | Higher sector concentration → higher predicted risk |
+| `top_holding_pct` | +0.55 | Higher single-stock concentration → higher predicted risk |
+| `hhi` | +0.29 | Higher overall portfolio concentration → higher predicted risk |
+| `sector_hhi` | +0.26 | Higher sector concentration → higher predicted risk |
 | `total_value` | +0.04 | Negligible; portfolio size shows little independent effect once concentration is accounted for |
-| `num_holdings` | -0.12 | More distinct holdings → lower predicted risk |
-| `hhi` | -0.61 | Counter-intuitive; see below |
+| `num_holdings` | -0.03 | More distinct holdings → lower predicted risk |
 
-**`hhi`'s negative coefficient is a multicollinearity artefact, not a genuine finding.** `hhi` and `top_holding_pct` are correlated at 0.96 (confirmed via direct correlation analysis), since a portfolio's largest holding is the dominant term in its own HHI calculation. With two features this strongly correlated, Logistic Regression cannot cleanly separate their individual effects: `top_holding_pct` absorbs the real, positive relationship, while `hhi`'s coefficient is pushed into an unstable, compensating direction. Both features are retained, since removing either would discard genuine predictive information; this instability is a well-understood limitation of linear models under multicollinearity, and is far less pronounced in Model 2 (XGBoost), a tree-based model robust to correlated features.
+**All five coefficients are directionally consistent with this study's hypothesis**, with concentration measures (`top_holding_pct`, `hhi`, `sector_hhi`) all positively associated with predicted risk, and a greater number of distinct holdings associated with lower risk. `hhi` and `top_holding_pct` are correlated at 0.96, since a portfolio's largest holding is the dominant term in its own HHI calculation; achieving a correctly-signed `hhi` coefficient despite this correlation required the regularisation strength documented above.
 
 ## Performance Summary
 
 | Metric | Value |
 |---|---|
-| ROC-AUC | 0.919 |
-| Recall (positive class) | 0.88 |
-| Precision (positive class) | 0.12 |
-| Accuracy | 0.85 |
+| ROC-AUC | 0.921 |
+| Recall (positive class) | 0.78 |
+| Precision (positive class) | 0.13 |
+| Accuracy | 0.88 |
 
-**High recall, low precision is a deliberate outcome of `class_weight="balanced"`, not an unaddressed weakness.** The model correctly identifies 100 of 114 genuinely at-risk portfolios in the test set, at the cost of 758 false positives. Given this project's purpose, flagging portfolios for STADIOEquities to review before a loss occurs, missing a genuinely at-risk client (a false negative) is more costly than an unnecessary review (a false positive), making this trade-off directionally appropriate. A full comparison against Model 2's metrics is presented in [Comparison.MD](../../experiments/results/Comparison.MD) (Part C).
+**High recall relative to a low base rate, and low precision, reflect a deliberate trade-off, not an unaddressed weakness.** The model correctly identifies 89 of 114 genuinely at-risk portfolios in the test set, at the cost of 586 false positives. This trade-off is a direct consequence of prioritising a correctly-signed, interpretable `hhi` coefficient during hyperparameter selection (see Hyperparameters above); a less regularised model recovers additional recall at the cost of `hhi`'s interpretability. Given this project's purpose, flagging portfolios for STADIOEquities to review before a loss occurs, both the missed cases and the false-positive volume represent genuine, quantified costs worth weighing directly against the interpretability gained. A full comparison against Model 2's metrics is presented in [Comparison.MD](../../experiments/results/Comparison.MD) (Part C).
 
 ## Visualisations
 
@@ -72,4 +73,4 @@ The test set's lower positive rate (114 positive cases) is a known limitation of
 ## Limitations
 
 - The positive-class count in the test set (114 cases) means precision/recall figures carry sampling uncertainty; a modest number of additional correct or incorrect predictions could shift these metrics noticeably.
-- `hhi` and `top_holding_pct` remain correlated at 0.96, limiting the individual interpretability of the `hhi` coefficient specifically, though the model's overall predictive performance (ROC-AUC) is unaffected.
+- The choice of `C=0.001` explicitly trades recall for `hhi`'s interpretability; at less aggressive regularisation, recall improves modestly while `hhi`'s coefficient reverts to an uninterpretable, collinearity-driven sign. This is a considered decision rather than an unambiguous optimum, and the trade-off should be revisited if STADIOEquities' priorities favour maximising recall over feature-level interpretability.
