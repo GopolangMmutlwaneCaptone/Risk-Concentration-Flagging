@@ -103,3 +103,4 @@ A review of three related publications and a description of the publicly availab
 - [Model 2: XGBoost](src/models/Model2_XGBoost.MD): gradient-boosted ensemble model, technique, and hyperparameters
 - [Model 2 Performance](experiments/results/Model2_XGBoost_Performance.MD): Model 2 test-set metrics and results
 - [Model Comparison](experiments/results/Comparison.MD): side-by-side comparison and model recommendation
+- [Recommendations Report](reports/recommendations_report.pdf): model recommendations, model improvement suggestions, and alignment with literature
