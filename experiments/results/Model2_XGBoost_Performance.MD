@@ -36,4 +36,6 @@ Identical time-based test set used for Model 1: 5,093 institution-quarter observ
 
 ## Interpretation
 
+**Accuracy (0.79) is a misleading headline metric on its own, given the 2.2% class imbalance in the test set**, a model that always predicted "no loss" would score 97.8% accuracy while being entirely useless for this study's purpose.
+
 **ROC-AUC (0.926) is marginally higher than Model 1's 0.921**, essentially equivalent ranking performance. Recall (0.94) is substantially higher than Model 1's 0.78, since Model 2's tree-based structure did not require the same interpretability-vs-recall trade-off Model 1 needed to correct an unstable `hhi` coefficient. `hhi` and `top_holding_pct` jointly account for approximately 77% of feature importance, confirming portfolio concentration as the dominant predictive signal (see Model2_XGBoost.MD for the full feature importance analysis, including its sensitivity to column-subsampling).
