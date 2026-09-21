@@ -35,4 +35,6 @@ Evaluation uses the held-out time-based test set (final two quarters, 2017-03 an
 
 ## Interpretation
 
+**Accuracy (0.88) is a misleading headline metric on its own, given the 2.2% class imbalance in the test set** — a model that always predicted "no loss" would score 97.8% accuracy while being entirely useless for this study's purpose.
+
 **High recall relative to a low base rate, and low precision, reflect a deliberate trade-off made during hyperparameter selection, not an unaddressed weakness.** The model correctly identifies 89 of 114 genuinely at-risk portfolios in the test set, at the cost of 586 false positives. `C=0.001` was selected specifically to produce a correctly-signed, interpretable `hhi` coefficient, at the cost of some recall relative to weaker regularisation (see Model1_Logistic_Regression.MD for the full trade-off analysis). Given this study's purpose, flagging portfolios for STADIOEquities to review before a loss occurs, both the missed cases and the false-positive volume represent genuine, quantified costs.
