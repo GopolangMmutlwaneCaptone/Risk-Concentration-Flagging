@@ -37,7 +37,7 @@ This repository is organised as follows:
 
 | Folder | Purpose |
 |---|---|
-| `data/` | | `data/` | Raw and processed datasets used in this project. The raw dataset is not committed here (see [Dataset](#dataset) below for download instructions). |
+| `data/` | Raw and processed datasets used in this project. The raw dataset is not committed here (see [Dataset](#dataset) below for download instructions). |
 | `notebooks/` | Exploratory data analysis notebooks |
 | `src/preprocessing/` | Data cleaning and preprocessing scripts |
 | `src/features/` | Feature engineering scripts |
@@ -50,6 +50,7 @@ This repository is organised as follows:
 | `reports/` | Client-facing written reports and recommendations |
 | `requests/` | Client-facing data requests (data request PDF) |
 | `literature-review/` | SS2 literature review and public dataset description |
+| `project-management/` | RAAIDD log and project management documentation |
 
 Each folder contains its own `README.md` describing its contents in more detail.
 
