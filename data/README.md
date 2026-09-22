@@ -1,3 +1,5 @@
 ﻿# Data
 
 Raw and processed datasets used in this project. Once STADIOEquities' requested data (see requests/data_request.pdf) is received, it will be stored here. Currently, this project uses SEC Form 13F institutional holdings data as a public proxy dataset (see root README for details).
+
+The raw dataset is not committed to this repository due to its size (over 300MB). Before running `preprocessing.ipynb`, download it from [Kaggle](https://www.kaggle.com/datasets/aneeshpanoli/sec-13fhr-institutional-investment-data) and place `13Fdata.csv`, `institutions.csv`, and `stock_names.csv` in `data/raw/`. All other files in this folder (mapped tickers, price history, engineered features) are generated automatically by running the notebooks in `src/preprocessing/`, `src/features/`, and `src/models/`, in that order.
