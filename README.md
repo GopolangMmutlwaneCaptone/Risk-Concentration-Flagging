@@ -37,7 +37,7 @@ This repository is organised as follows:
 
 | Folder | Purpose |
 |---|---|
-| `data/` | Raw and processed datasets used in this project |
+| `data/` | | `data/` | Raw and processed datasets used in this project. The raw dataset is not committed here (see [Dataset](#dataset) below for download instructions). |
 | `notebooks/` | Exploratory data analysis notebooks |
 | `src/preprocessing/` | Data cleaning and preprocessing scripts |
 | `src/features/` | Feature engineering scripts |
@@ -52,6 +52,12 @@ This repository is organised as follows:
 | `literature-review/` | SS2 literature review and public dataset description |
 
 Each folder contains its own `README.md` describing its contents in more detail.
+
+---
+
+## Dataset
+
+The raw SEC Form 13F dataset is not committed to this repository due to its size (over 300MB). Before running `preprocessing.ipynb`, download it from [Kaggle](https://www.kaggle.com/datasets/aneeshpanoli/sec-13fhr-institutional-investment-data) and place `13Fdata.csv`, `institutions.csv`, and `stock_names.csv` in `data/raw/`. All other data files (mapped tickers, price history, engineered features) are generated automatically by running the notebooks in order.
 
 ---
 
