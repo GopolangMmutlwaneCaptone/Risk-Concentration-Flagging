@@ -217,6 +217,9 @@ __marimo__/
 # Large data and model files - not committed directly
 data/raw/*
 !data/raw/README.md
+!data/raw/client_extract/
+data/raw/client_extract/*
+!data/raw/client_extract/README.md
 data/processed/*
 !data/processed/README.md
 artifacts/*
