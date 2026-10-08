@@ -85,7 +85,7 @@ This repository is organised as follows:
 | `src/preprocessing/` | SS2 data cleaning and preprocessing notebook and documentation |
 | `src/features/` | SS2 feature engineering notebook and documentation |
 | `src/models/` | SS2 model notebooks (logistic regression, XGBoost) and documentation |
-| `SS3_PartB/` | SS3 Part B notebook applying the chosen model to the client extract, and the charts it produces |
+| `SS3_PartB/` | SS3 Part B notebook applying the chosen model to the client extract; the charts it produces are saved in `SS3_PartB/charts/` |
 | `artifacts/` | Saved trained model artifacts, generated locally by running the model notebooks (not committed) |
 | `experiments/results/` | Experimental results (metrics, comparison, performance documents) |
 | `reports/` | Client-facing written reports and recommendations, with charts in `reports/charts/` |
