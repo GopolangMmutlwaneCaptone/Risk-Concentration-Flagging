@@ -9,7 +9,7 @@ This document presents the test-set performance of Model 2 (XGBoost), described 
 ## How to Use
 
 1. Ensure `model_features.csv` exists in `data/processed/` (produced by Feature Engineering).
-2. Ensure `xgboost` is installed (`pip install -r requirements.txt`).
+2. Ensure `xgboost` is installed, using the root [`requirements.txt`](../../requirements.txt) (`pip install -r requirements.txt`, run from the repository root).
 3. Open `model2_xgboost.ipynb` and run all cells in order, top to bottom.
 4. The metrics and confusion matrix below are produced by the "Evaluate on Test Set" section, using the final model selected in "Final Model Selection" (tuned via expanded grid search).
 
