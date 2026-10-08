@@ -91,7 +91,8 @@ This repository is organised as follows:
 | `reports/` | Client-facing written reports and recommendations, with charts in `reports/charts/` |
 | `requests/` | Client-facing data requests (data request PDF) |
 | `literature-review/` | SS2 literature review and public dataset description |
-| `notebooks/`, `src/evaluation/`, `src/visualisation/`, `experiments/setup/` | Placeholder folders that currently contain only a README; the analysis itself lives in the notebooks under `src/` |
+
+Each notebook lives beside the code and write-ups it belongs to (`src/preprocessing/`, `src/features/`, `src/models/` and `SS3_PartB/`), so there is no separate `notebooks/` folder.
 
 Most folders contain their own `README.md` describing their contents in more detail.
 
