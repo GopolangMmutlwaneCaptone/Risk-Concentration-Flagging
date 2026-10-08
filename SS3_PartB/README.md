@@ -1,6 +1,6 @@
 # SS3 Part B
 
-Applies the model chosen in SS2 (XGBoost) to STADIOEquities' real client data extract, from dataset loading through to results visualisation. The notebook reads only the client extract and does not depend on any SS2 output. For the results, see [Results at a Glance](../README.md#results-at-a-glance) in the root README.
+Applies the model chosen in SS2 (XGBoost) to the client data extract supplied by STADIOEquities for the capstone, from dataset loading through to results visualisation. The notebook reads only the client extract and does not depend on any SS2 output. For the results, see [Results at a Glance](../README.md#results-at-a-glance) in the root README.
 
 ## Running the notebook
 

@@ -44,7 +44,7 @@ The project was delivered in three stages. Each stage builds on the previous one
 |---|---|---|
 | **SS1** | Problem selection and framing, the data request to STADIOEquities, and the RAAIDD log | [Problem Statement](#problem-statement), [Data Request](#data-request), [RAAIDD Log](#raaidd-log) |
 | **SS2** | The methodology, validated on a public proxy dataset (SEC Form 13F institutional holdings): literature review, preprocessing, feature engineering, label construction, two models (logistic regression and XGBoost), a statistical comparison, and a recommendations report | [Literature Review](#literature-review), [Related Documentation](#related-documentation), [Recommendations Report](reports/recommendations_report.pdf) |
-| **SS3** | Part B: the model chosen in SS2 (XGBoost) applied to STADIOEquities' real client data extract, from dataset loading through to results visualisation | [`SS3_PartB/SS3_PartB.ipynb`](SS3_PartB/SS3_PartB.ipynb) |
+| **SS3** | Part B: the model chosen in SS2 (XGBoost) applied to the client data extract supplied by STADIOEquities (synthetic data), from dataset loading through to results visualisation | [`SS3_PartB/SS3_PartB.ipynb`](SS3_PartB/SS3_PartB.ipynb) |
 
 ---
 
