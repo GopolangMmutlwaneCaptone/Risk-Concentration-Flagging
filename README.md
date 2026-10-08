@@ -8,7 +8,12 @@
 ## Table of Contents
 - [Motivation](#motivation)
 - [Problem Statement](#problem-statement)
+- [Project Stages](#project-stages)
+- [Results at a Glance](#results-at-a-glance)
 - [Repository Structure](#repository-structure)
+- [Dataset](#dataset)
+- [Setup and Running the Notebooks](#setup-and-running-the-notebooks)
+- [Reproducibility](#reproducibility)
 - [Data Request](#data-request)
 - [RAAIDD Log](#raaidd-log)
 - [Literature Review](#literature-review)
@@ -31,34 +36,112 @@ Despite STADIOEquities' current approach of identifying unsuitable investment be
 
 ---
 
+## Project Stages
+
+The project was delivered in three stages. Each stage builds on the previous one.
+
+| Stage | What it covers | Where to look |
+|---|---|---|
+| **SS1** | Problem selection and framing, the data request to STADIOEquities, and the RAAIDD log | [Problem Statement](#problem-statement), [Data Request](#data-request), [RAAIDD Log](#raaidd-log) |
+| **SS2** | The methodology, validated on a public proxy dataset (SEC Form 13F institutional holdings): literature review, preprocessing, feature engineering, label construction, two models (logistic regression and XGBoost), a statistical comparison, and a recommendations report | [Literature Review](#literature-review), [Related Documentation](#related-documentation), [Recommendations Report](reports/recommendations_report.pdf) |
+| **SS3** | Part B: the model chosen in SS2 (XGBoost) applied to STADIOEquities' real client data extract, from dataset loading through to results visualisation | [`SS3_PartB/SS3_PartB.ipynb`](SS3_PartB/SS3_PartB.ipynb) |
+
+---
+
+## Results at a Glance
+
+**SS2: public proxy dataset.** 20,244 portfolio-period rows (846 positive), evaluated on a held-out test set of 5,093 rows (114 positive).
+
+| Metric (positive class) | Model 1: Logistic Regression | Model 2: XGBoost |
+|---|---|---|
+| ROC-AUC | 0.921 | 0.926 |
+| Recall | 0.78 | 0.94 |
+| Precision | 0.13 | 0.09 |
+
+XGBoost was recommended because catching at-risk portfolios matters more here than avoiding false alarms. A DeLong test found no significant difference in ROC-AUC (p = 0.210), while McNemar's test showed the two models classify different cases correctly. Full detail is in [Model Comparison](experiments/results/Comparison.MD).
+
+**SS3: STADIOEquities client extract.** 418 clients, of whom 17 (4.07%) are flagged by the label (stated risk appetite is Low and portfolio concentration is above the 75th percentile). The split is stratified 70/15/15, giving 12, 3 and 2 positive clients in the training, validation and test sets.
+
+| Set | ROC-AUC | Positives caught | Precision (positive class) |
+|---|---|---|---|
+| Validation (63 clients) | 0.856 | 1 of 3 | 0.17 |
+| Test, unseen (63 clients) | 0.951 | 2 of 2 | 0.29 |
+
+Points to read alongside these numbers:
+- With only 2 to 3 positive clients per evaluation set, each metric is decided by one or two individual clients and should be read as an early signal, not a stable estimate.
+- In validation, the model missed the single most concentrated client (one holding, concentration index 1.0) because nothing like it appeared among the 12 training positives. The notebook recommends running a simple absolute rule for extreme concentration alongside the model.
+- The label is a business-defined construct. It could not be validated against suitability complaints in this extract (Mann-Whitney U tests, p = 0.738 for the concentration index and p = 0.840 for top-holding percentage), and the notebook reports this as a finding rather than omitting it.
+- The extract is synthetic data supplied for the module.
+
+---
+
 ## Repository Structure
 
 This repository is organised as follows:
 
 | Folder | Purpose |
 |---|---|
-| `data/` | Raw and processed datasets used in this project. The raw dataset is not committed here (see [Dataset](#dataset) below for download instructions). |
-| `notebooks/` | Exploratory data analysis notebooks |
-| `src/preprocessing/` | Data cleaning and preprocessing scripts |
-| `src/features/` | Feature engineering scripts |
-| `src/models/` | Model training and inference code |
-| `src/evaluation/` | Statistical helper and model comparison scripts |
-| `src/visualisation/` | Charting and visualisation scripts |
-| `artifacts/` | Saved trained model artifacts |
-| `experiments/setup/` | Experimental setup (configs, train/test split logic, etc.) |
-| `experiments/results/` | Experimental results (metrics, output tables, saved reports) |
-| `reports/` | Client-facing written reports and recommendations |
+| `data/` | Raw and processed datasets used in this project. Raw data is not committed here (see [Dataset](#dataset) below). `data/raw/client_extract/` is where the STADIOEquities client extract for SS3 is placed; only its README is committed. |
+| `src/preprocessing/` | SS2 data cleaning and preprocessing notebook and documentation |
+| `src/features/` | SS2 feature engineering notebook and documentation |
+| `src/models/` | SS2 model notebooks (logistic regression, XGBoost) and documentation |
+| `SS3_PartB/` | SS3 Part B notebook applying the chosen model to the client extract, and the charts it produces |
+| `artifacts/` | Saved trained model artifacts, generated locally by running the model notebooks (not committed) |
+| `experiments/results/` | Experimental results (metrics, comparison, performance documents) |
+| `reports/` | Client-facing written reports and recommendations, with charts in `reports/charts/` |
 | `requests/` | Client-facing data requests (data request PDF) |
 | `literature-review/` | SS2 literature review and public dataset description |
-| `project-management/` | RAAIDD log and project management documentation |
+| `notebooks/`, `src/evaluation/`, `src/visualisation/`, `experiments/setup/` | Placeholder folders that currently contain only a README; the analysis itself lives in the notebooks under `src/` |
 
-Each folder contains its own `README.md` describing its contents in more detail.
+Most folders contain their own `README.md` describing their contents in more detail.
 
 ---
 
 ## Dataset
 
-The raw SEC Form 13F dataset is not committed to this repository due to its size (over 300MB). Before running `preprocessing.ipynb`, download it from [Kaggle](https://www.kaggle.com/datasets/aneeshpanoli/sec-13fhr-institutional-investment-data) and place `13Fdata.csv`, `institutions.csv`, and `stock_names.csv` in `data/raw/`. All other data files (mapped tickers, price history, engineered features) are generated automatically by running the notebooks in order.
+**SS2 (public proxy dataset).** The raw SEC Form 13F dataset is not committed to this repository due to its size (over 300MB). Before running `preprocessing.ipynb`, download it from [Kaggle](https://www.kaggle.com/datasets/aneeshpanoli/sec-13fhr-institutional-investment-data) and place `13Fdata.csv`, `institutions.csv`, and `stock_names.csv` in `data/raw/`. All other data files (mapped tickers, price history, engineered features) are generated automatically by running the notebooks in order.
+
+**SS3 (STADIOEquities client extract).** The extract consists of four CSV tables: client account information, portfolio holdings, transaction history, and support complaint history. It is client data and is not distributed with this repository. To run the SS3 notebook, place the four `table*.csv` files in `data/raw/client_extract/`; the [extract README](data/raw/client_extract/README.md) describes each table and its known data quality issues.
+
+---
+
+## Setup and Running the Notebooks
+
+The pinned environment in `requirements.txt` was built on Python 3.14.
+
+```powershell
+# Windows (PowerShell)
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
+```bash
+# macOS / Linux
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Then open the notebooks in VS Code or Jupyter and select the `.venv` interpreter as the kernel (`ipykernel` is included in `requirements.txt`). Run each notebook top to bottom with a fresh kernel.
+
+**SS2 run order** (each step reads the files written by the one before it):
+
+1. `src/preprocessing/preprocessing.ipynb`: ticker mapping and price data. This is the slow step; the ticker lookup and sector lookup can take several hours in total, and intermediate results are checkpointed to `data/processed/`.
+2. `src/features/feature_engineering.ipynb`
+3. `src/models/model1_logistic_regression.ipynb`
+4. `src/models/model2_xgboost.ipynb`, which must run after Model 1 because it loads the model and scaler Model 1 saves to `artifacts/`.
+
+**SS3:** after placing the client extract (see [Dataset](#dataset)), run `SS3_PartB/SS3_PartB.ipynb`. It reads only the client extract and does not depend on any SS2 output.
+
+---
+
+## Reproducibility
+
+- **Seeds.** Every model, data split and cross-validation step sets a fixed random seed, and results are deterministic within a given environment. The SS3 notebook uses `random_state=42` throughout.
+- **SS2 environment.** The committed SS2 results were produced on Python 3.11 with the package versions recorded in `src/models/requirements.txt` (including xgboost 2.0.3).
+- **Re-running on a newer environment.** On Python 3.14 with xgboost 3.4.1, Model 1 reproduces exactly, while Model 2 shifts slightly: ROC-AUC 0.924 instead of 0.926, and the DeLong p-value 0.41 instead of 0.21. Recall (0.94) is unchanged, and the conclusions are the same. The documents in this repository quote the committed values.
+- **SS3 environment.** The SS3 notebook was run on the environment pinned in `requirements.txt`.
 
 ---
 
@@ -111,3 +194,4 @@ A review of three related publications and a description of the publicly availab
 - [Model 2 Performance](experiments/results/Model2_XGBoost_Performance.MD): Model 2 test-set metrics and results
 - [Model Comparison](experiments/results/Comparison.MD): side-by-side comparison and model recommendation
 - [Recommendations Report](reports/recommendations_report.pdf): model recommendations, model improvement suggestions, and alignment with literature
+- [SS3 Part B notebook](SS3_PartB/SS3_PartB.ipynb): the chosen model applied to the STADIOEquities client extract

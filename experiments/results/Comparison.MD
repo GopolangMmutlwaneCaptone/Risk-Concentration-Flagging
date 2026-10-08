@@ -8,7 +8,9 @@ This document compares the two models' performance on the identical held-out tes
 
 ## How to Use
 
-Both notebooks must be run first, in either order, since they train and evaluate independently on the same test set. This document synthesises their results; it does not require separate code to run.
+Both notebooks must be run first, **Model 1 before Model 2**: `model2_xgboost.ipynb` loads the model and scaler that `model1_logistic_regression.ipynb` saves to `artifacts/`, so that it can run the two significance tests below on both models' predictions. Both train and evaluate on the same held-out test set. This document synthesises their results; it does not require separate code to run.
+
+The figures in this document were produced on Python 3.11 with the package versions recorded in [`src/models/requirements.txt`](../../src/models/requirements.txt) (including xgboost 2.0.3). Re-running on a newer environment gives slightly different Model 2 values (for example a ROC-AUC of 0.924 instead of 0.926) with the same conclusions; see the [Reproducibility](../../README.md#reproducibility) section of the root README.
 
 ## Side-by-Side Metrics
 
@@ -18,7 +20,7 @@ Both notebooks must be run first, in either order, since they train and evaluate
 | Accuracy | **0.88** | 0.79 |
 | Precision (positive class) | **0.13** | 0.09 |
 | Recall (positive class) | 0.78 | **0.94** |
-| F1-score (positive class) | 0.23 | **0.17** |
+| F1-score (positive class) | **0.23** | 0.17 |
 
 ![Model comparison chart](../../reports/charts/model_comparison.png)
 
@@ -55,7 +57,7 @@ The result (z=-1.253, p=0.210) finds no statistically significant difference bet
 
 ## Discussion
 
-**On raw ranking ability, the two models are close.** ROC-AUC differs by only 0.005. Model 1 achieves higher precision, accuracy, and F1, while Model 2 achieves substantially higher recall.
+**On raw ranking ability, the two models are close.** ROC-AUC differs by only about 0.004 (0.9211 vs. 0.9255). Model 1 achieves higher precision, accuracy, and F1, while Model 2 achieves substantially higher recall.
 
 **This difference is directly explained by each model's hyperparameter selection process.** Model 1's Logistic Regression suffers from a 0.96 correlation between `hhi` and `top_holding_pct`; achieving a correctly-signed, interpretable `hhi` coefficient required strong regularisation (`C=0.001`), which came at a real recall cost. Model 2's tree-based structure handles this same correlation without producing an unstable coefficient, so no equivalent trade-off was necessary, allowing it to retain higher recall.
 
