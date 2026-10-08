@@ -44,7 +44,7 @@ The project was delivered in three stages. Each stage builds on the previous one
 |---|---|---|
 | **SS1** | Problem selection and framing, the data request to STADIOEquities, and the RAAIDD log | [Problem Statement](#problem-statement), [Data Request](#data-request), [RAAIDD Log](#raaidd-log) |
 | **SS2** | The methodology, validated on a public proxy dataset (SEC Form 13F institutional holdings): literature review, preprocessing, feature engineering, label construction, two models (logistic regression and XGBoost), a statistical comparison, and a recommendations report | [Literature Review](#literature-review), [Related Documentation](#related-documentation), [Recommendations Report](reports/recommendations_report.pdf) |
-| **SS3** | Part B: the model chosen in SS2 (XGBoost) applied to the client data extract supplied by STADIOEquities (synthetic data), from dataset loading through to results visualisation | [`SS3_PartB/SS3_PartB.ipynb`](SS3_PartB/SS3_PartB.ipynb) |
+| **SS3** | Part B: the model family chosen in SS2 (XGBoost), retrained on the client data extract with different hyperparameters (synthetic data supplied by STADIOEquities), from dataset loading through to results visualisation | [`SS3_PartB/SS3_PartB.ipynb`](SS3_PartB/SS3_PartB.ipynb) |
 
 ---
 
@@ -60,7 +60,7 @@ The project was delivered in three stages. Each stage builds on the previous one
 
 XGBoost was recommended because catching at-risk portfolios matters more here than avoiding false alarms. A DeLong test found no significant difference in ROC-AUC (p = 0.210), while McNemar's test showed the two models classify different cases correctly. Full detail is in [Model Comparison](experiments/results/Comparison.MD).
 
-**SS3: STADIOEquities client extract.** 418 clients, of whom 17 (4.07%) are flagged by the label (stated risk appetite is Low and portfolio concentration is above the 75th percentile). The split is stratified 70/15/15, giving 12, 3 and 2 positive clients in the training, validation and test sets.
+**SS3: STADIOEquities client extract.** 418 clients, of whom 17 (4.07%) are flagged by the label (stated risk appetite is Low and portfolio concentration is above the 75th percentile). The split is stratified 70/15/15, giving 12, 3 and 2 positive clients in the training, validation and test sets. The model's features describe concentration, portfolio value and auto-invest activity but not stated risk appetite, so it ranks clients by concentration rather than by the full label.
 
 | Set | ROC-AUC | Positives caught | Precision (positive class) |
 |---|---|---|---|
@@ -69,7 +69,7 @@ XGBoost was recommended because catching at-risk portfolios matters more here th
 
 Points to read alongside these numbers:
 - With only 2 to 3 positive clients per evaluation set, each metric is decided by one or two individual clients and should be read as an early signal, not a stable estimate.
-- In validation, the model missed the single most concentrated client (one holding, concentration index 1.0) because nothing like it appeared among the 12 training positives. The notebook recommends running a simple absolute rule for extreme concentration alongside the model.
+- In validation, the model missed a client whose whole portfolio is in one holding (concentration index 1.0). The cause was not tested: none of the 12 training positives resembles this client, and because the model does not see stated risk appetite it may also have learned from highly concentrated clients labelled negative. The notebook recommends running a simple absolute rule for extreme concentration alongside the model.
 - The label is a business-defined construct. It could not be validated against suitability complaints in this extract (Mann-Whitney U tests, p = 0.738 for the concentration index and p = 0.840 for top-holding percentage), and the notebook reports this as a finding rather than omitting it.
 - The extract is synthetic data supplied for the module.
 
@@ -85,7 +85,7 @@ This repository is organised as follows:
 | `src/preprocessing/` | SS2 data cleaning and preprocessing notebook and documentation |
 | `src/features/` | SS2 feature engineering notebook and documentation |
 | `src/models/` | SS2 model notebooks (logistic regression, XGBoost) and documentation |
-| `SS3_PartB/` | SS3 Part B notebook applying the chosen model to the client extract; the charts it produces are saved in `SS3_PartB/charts/` |
+| `SS3_PartB/` | SS3 Part B notebook applying the model family chosen in SS2 (XGBoost), retrained on the client data extract with different hyperparameters; the charts it produces are saved in `SS3_PartB/charts/` |
 | `artifacts/` | Saved trained model artifacts, generated locally by running the model notebooks (not committed) |
 | `experiments/results/` | Experimental results (metrics, comparison, performance documents) |
 | `reports/` | Client-facing written reports and recommendations, with charts in `reports/charts/` |
@@ -102,7 +102,7 @@ Most folders contain their own `README.md` describing their contents in more det
 
 **SS2 (public proxy dataset).** The raw SEC Form 13F dataset is not committed to this repository due to its size (over 300MB). Before running `preprocessing.ipynb`, download it from [Kaggle](https://www.kaggle.com/datasets/aneeshpanoli/sec-13fhr-institutional-investment-data) and place `13Fdata.csv`, `institutions.csv`, and `stock_names.csv` in `data/raw/`. All other data files (mapped tickers, price history, engineered features) are generated automatically by running the notebooks in order.
 
-**SS3 (STADIOEquities client extract).** The extract consists of four CSV tables: client account information, portfolio holdings, transaction history, and support complaint history. It is client data and is not distributed with this repository. To run the SS3 notebook, place the four `table*.csv` files in `data/raw/client_extract/`; the [extract README](data/raw/client_extract/README.md) describes each table and its known data quality issues.
+**SS3 (STADIOEquities client extract).** The extract consists of four CSV tables: client account information, portfolio holdings, transaction history, and support complaint history. It is a synthetic client data extract supplied for the capstone and is not distributed with this repository. To run the SS3 notebook, place the four `table*.csv` files in `data/raw/client_extract/`; the [extract README](data/raw/client_extract/README.md) describes each table and its known data quality issues.
 
 ---
 
@@ -195,4 +195,4 @@ A review of three related publications and a description of the publicly availab
 - [Model 2 Performance](experiments/results/Model2_XGBoost_Performance.MD): Model 2 test-set metrics and results
 - [Model Comparison](experiments/results/Comparison.MD): side-by-side comparison and model recommendation
 - [Recommendations Report](reports/recommendations_report.pdf): model recommendations, model improvement suggestions, and alignment with literature
-- [SS3 Part B notebook](SS3_PartB/SS3_PartB.ipynb): the chosen model applied to the STADIOEquities client extract
+- [SS3 Part B notebook](SS3_PartB/SS3_PartB.ipynb): the model family chosen in SS2 (XGBoost), retrained on the client data extract with different hyperparameters
