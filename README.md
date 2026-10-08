@@ -127,8 +127,8 @@ Then open the notebooks in VS Code or Jupyter and select the `.venv` interpreter
 
 **SS2 run order** (each step reads the files written by the one before it):
 
-1. `src/preprocessing/preprocessing.ipynb`: ticker mapping and price data. This is the slow step; the ticker lookup and sector lookup can take several hours in total, and intermediate results are checkpointed to `data/processed/`.
-2. `src/features/feature_engineering.ipynb`
+1. `src/preprocessing/preprocessing.ipynb`: ticker mapping and price data. This is the slowest step; the CUSIP-to-ticker lookup can take several hours on a first run, and intermediate results are checkpointed to `data/processed/`.
+2. `src/features/feature_engineering.ipynb`: concentration features and the risk label. The sector lookup (`yfinance` ticker metadata) runs here and takes roughly 60 to 90 minutes on a first run, with results checkpointed to `data/processed/`; label construction adds about 22 minutes.
 3. `src/models/model1_logistic_regression.ipynb`
 4. `src/models/model2_xgboost.ipynb`, which must run after Model 1 because it loads the model and scaler Model 1 saves to `artifacts/`.
 
@@ -139,7 +139,7 @@ Then open the notebooks in VS Code or Jupyter and select the `.venv` interpreter
 ## Reproducibility
 
 - **Seeds.** Every model, data split and cross-validation step sets a fixed random seed, and results are deterministic within a given environment. The SS3 notebook uses `random_state=42` throughout.
-- **SS2 environment.** The committed SS2 results were produced on Python 3.11 with the package versions recorded in `src/models/requirements.txt` (including xgboost 2.0.3).
+- **SS2 environment.** The committed SS2 results were produced on Python 3.11 with xgboost 2.0.3. The SS2 requirements files under `src/` only partly record that environment: `src/models/requirements.txt` pins pandas 3.0.5, numpy 2.4.6, xgboost 2.0.3 and jupyter 1.0.0, but leaves matplotlib, scikit-learn, joblib and notebook unpinned, and the preprocessing and feature engineering files likewise leave matplotlib unpinned. The root `requirements.txt` targets Python 3.14 instead.
 - **Re-running on a newer environment.** On Python 3.14 with xgboost 3.4.1, Model 1 reproduces exactly, while Model 2 shifts slightly: ROC-AUC 0.924 instead of 0.926, and the DeLong p-value 0.41 instead of 0.21. Recall (0.94) is unchanged, and the conclusions are the same. The documents in this repository quote the committed values.
 - **SS3 environment.** The SS3 notebook was run on the environment pinned in `requirements.txt`.
 
