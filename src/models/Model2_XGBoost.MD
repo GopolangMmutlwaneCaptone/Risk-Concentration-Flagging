@@ -33,7 +33,7 @@ The identical time-based split used in Model 1 is applied here, ensuring a fair,
 
 | Parameter | Value | Reasoning |
 |---|---|---|
-| `max_depth` | 3 | Selected via grid search using `TimeSeriesSplit` cross-validation (5 folds) |
+| `max_depth` | 3 | Selected via grid search using `TimeSeriesSplit` cross-validation (5 folds); the training rows are ordered by institution rather than by quarter, so the folds are not strictly chronological (see [Known Limitations](../../README.md#known-limitations) in the root README) |
 | `learning_rate` | 0.01 | Selected via the same grid search |
 | `n_estimators` | 50 | Selected via the same grid search |
 | `subsample` | 0.7 | Selected via the same grid search; each tree trains on 70% of rows, reducing overfitting risk |
@@ -66,7 +66,7 @@ The identical time-based split used in Model 1 is applied here, ensuring a fair,
 | Precision (positive class) | 0.09 | 0.13 |
 | Accuracy | 0.79 | 0.88 |
 
-**Overall ranking ability (ROC-AUC) is essentially equivalent between the two models.** Model 2 catches a substantially higher proportion of genuinely at-risk portfolios (107 of 114, recall 0.94) than Model 1 (89 of 114, recall 0.78), at the cost of a higher false-positive rate (1,044 vs. 586) and lower accuracy. This difference reflects each model's hyperparameter selection: Model 1's `C` was deliberately chosen to prioritise a correctly-signed, interpretable `hhi` coefficient at a real recall cost, while Model 2 required no equivalent trade-off, since its tree-based structure handles the same underlying correlation without producing an unstable or counter-intuitive coefficient. Model 2's principal advantage over Model 1 is therefore twofold: a more correct and interpretable picture of which features drive risk from the outset, and higher recall without needing to sacrifice that interpretability. A full, formal comparison, including a side-by-side chart of both models' metrics, is presented in [Comparison.MD](../../experiments/results/Comparison.MD) (Part C).
+**Overall ranking ability (ROC-AUC) is essentially equivalent between the two models.** Model 2 catches a substantially higher proportion of genuinely at-risk portfolios (107 of 114, recall 0.94) than Model 1 (89 of 114, recall 0.78), at the cost of a higher false-positive rate (1,044 vs. 586) and lower accuracy. This difference is consistent with each model's hyperparameter selection: Model 1's `C` was deliberately chosen to prioritise a correctly-signed, interpretable `hhi` coefficient at a real recall cost, while Model 2 required no equivalent trade-off, since its tree-based structure handles the same underlying correlation without producing an unstable or counter-intuitive coefficient. Model 2's principal advantage over Model 1 is therefore its higher recall without the same coefficient-sign trade-off. Its feature importances confirm concentration as the dominant signal, but the precise individual split between `hhi` and `top_holding_pct` is sensitive to `colsample_bytree` and should not be over-interpreted in isolation (see Feature Importance above). A full, formal comparison, including a side-by-side chart of both models' metrics, is presented in [Comparison.MD](../../experiments/results/Comparison.MD) (Part C).
 
 ## Visualisations
 

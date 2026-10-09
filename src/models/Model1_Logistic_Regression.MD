@@ -22,7 +22,7 @@ This document describes Model 1, a Logistic Regression classifier predicting con
 
 ## Data Split
 
-A **time-based split** is used rather than a random split, given the panel (quarterly, repeated-institution) structure of the data: training uses the first 8 quarters (2015-03 to 2016-12), testing uses the final 2 quarters (2017-03, 2017-06). This avoids a model trained partly on later market conditions being evaluated on earlier ones, a form of leakage a random split would risk.
+A **time-based split** is used rather than a random split, given the panel (quarterly, repeated-institution) structure of the data: training uses the first 8 quarters (2015-03 to 2016-12), testing uses the final 2 quarters (2017-03, 2017-06). This keeps every test quarter later than every training quarter, avoiding a model trained partly on later market conditions being evaluated on earlier ones, a form of leakage a random split would risk; the last training labels do run up to the start of the test period (see the label horizon entry in [Known Limitations](../../README.md#known-limitations) in the root README).
 
 | Split | Rows | Positive Rate |
 |---|---|---|
@@ -35,7 +35,7 @@ The test set's lower positive rate (114 positive cases) is a known limitation of
 
 | Parameter | Value | Reasoning |
 |---|---|---|
-| `C` | `0.001` | Selected via grid search using `TimeSeriesSplit` cross-validation (5 folds), which respects the chronological ordering of quarters rather than shuffling data randomly. `C=0.001` was chosen because it produces a correctly-signed, interpretable `hhi` coefficient, addressing a multicollinearity issue between `hhi` and `top_holding_pct` (see Feature Coefficients below); ROC-AUC is essentially flat across the tested range of `C` values, so this selection prioritises interpretability without a meaningful cost to ranking performance |
+| `C` | `0.001` | Selected via grid search using `TimeSeriesSplit` cross-validation (5 folds), although the training rows are ordered by institution rather than by quarter, so the folds are not strictly chronological (see [Known Limitations](../../README.md#known-limitations) in the root README). `C=0.001` was chosen because it produces a correctly-signed, interpretable `hhi` coefficient, addressing a multicollinearity issue between `hhi` and `top_holding_pct` (see Feature Coefficients below); ROC-AUC is essentially flat across the tested range of `C` values, so this selection prioritises interpretability without a meaningful cost to ranking performance |
 | `class_weight` | `"balanced"` | Compensates for label imbalance (4.2% positive overall) by weighting the minority class more heavily during training, avoiding the need for manual oversampling/undersampling |
 | `max_iter` | `1000` | Increased from the default to ensure convergence given standardised, moderate-dimensionality input |
 | `random_state` | `42` | Fixed for reproducibility |

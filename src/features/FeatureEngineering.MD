@@ -26,7 +26,7 @@ This document describes the feature engineering pipeline used to build the model
 5. **Computes five portfolio-level features per institution per quarter:**
    - **HHI** (Herfindahl-Hirschman Index): sum of squared portfolio weights, a standard measure of concentration
    - **Top-holding percentage**: the largest single position's weight in the portfolio
-   - **Number of distinct holdings**
+   - **Number of holdings**: the count of holding rows (CUSIP-level positions) in the portfolio, computed as `len(group)`, rather than a count of de-duplicated tickers. The SS3 notebook counts distinct tickers instead
    - **Sector HHI**: HHI computed at the sector level, measuring sector concentration rather than individual-stock concentration
    - **Total portfolio value**: the portfolio's total dollar value at that quarter-end
 6. **Constructs the binary risk label**: for each institution-quarter, computes the portfolio's concentration-weighted excess return over the *following* quarter relative to the S&P 500 benchmark, using a 45-day filing-date lag (`decision_date = quarter_end + 45 days`) as the information cutoff to avoid look-ahead bias, then flags the portfolio as high-risk (label = 1) if this weighted excess return falls below a defined threshold.

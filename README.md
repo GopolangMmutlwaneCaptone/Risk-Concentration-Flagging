@@ -14,6 +14,7 @@
 - [Dataset](#dataset)
 - [Setup and Running the Notebooks](#setup-and-running-the-notebooks)
 - [Reproducibility](#reproducibility)
+- [Known Limitations](#known-limitations)
 - [Data Request](#data-request)
 - [RAAIDD Log](#raaidd-log)
 - [Literature Review](#literature-review)
@@ -58,7 +59,7 @@ The project was delivered in three stages. Each stage builds on the previous one
 | Recall | 0.78 | 0.94 |
 | Precision | 0.13 | 0.09 |
 
-XGBoost was recommended because catching at-risk portfolios matters more here than avoiding false alarms. A DeLong test found no significant difference in ROC-AUC (p = 0.210), while McNemar's test showed the two models classify different cases correctly. Full detail is in [Model Comparison](experiments/results/Comparison.MD).
+XGBoost was recommended because catching at-risk portfolios matters more here than avoiding false alarms. A DeLong test found no significant difference in ROC-AUC (p = 0.210), while McNemar's test showed the two models classify different cases correctly, mostly cases Model 1 gets right and Model 2 gets wrong (460 against 20), which reflects Model 2's extra false positives. Full detail is in [Model Comparison](experiments/results/Comparison.MD).
 
 **SS3: STADIOEquities client extract.** 418 clients, of whom 17 (4.07%) are flagged by the label (stated risk appetite is Low and portfolio concentration is above the 75th percentile). The split is stratified 70/15/15, giving 12, 3 and 2 positive clients in the training, validation and test sets. The model's features describe concentration, portfolio value and auto-invest activity but not stated risk appetite, so it ranks clients by concentration rather than by the full label.
 
@@ -100,7 +101,7 @@ Most folders contain their own `README.md` describing their contents in more det
 
 ## Dataset
 
-**SS2 (public proxy dataset).** The raw SEC Form 13F dataset is not committed to this repository due to its size (over 300MB). Before running `preprocessing.ipynb`, download it from [Kaggle](https://www.kaggle.com/datasets/aneeshpanoli/sec-13fhr-institutional-investment-data) and place `13Fdata.csv`, `institutions.csv`, and `stock_names.csv` in `data/raw/`. All other data files (mapped tickers, price history, engineered features) are generated automatically by running the notebooks in order.
+**SS2 (public proxy dataset).** The raw SEC Form 13F dataset is not committed to this repository due to its size (over 300MB). Before running `preprocessing.ipynb`, download it from [Kaggle](https://www.kaggle.com/datasets/aneeshpanoli/sec-13fhr-institutional-investment-data) and place `13Fdata.csv`, `institutions.csv`, and `stock_names.csv` in `data/raw/`. No notebook reads `institutions.csv` or `stock_names.csv`; they come with the Kaggle download. All other data files (mapped tickers, price history, engineered features) are generated automatically by running the notebooks in order.
 
 **SS3 (STADIOEquities client extract).** The extract consists of four CSV tables: client account information, portfolio holdings, transaction history, and support complaint history. It is a synthetic client data extract supplied for the capstone and is not distributed with this repository. To run the SS3 notebook, place the four `table*.csv` files in `data/raw/client_extract/`; the [extract README](data/raw/client_extract/README.md) describes each table and its known data quality issues.
 
@@ -140,9 +141,24 @@ Then open the notebooks in VS Code or Jupyter and select the `.venv` interpreter
 ## Reproducibility
 
 - **Seeds.** Every model, data split and cross-validation step sets a fixed random seed, and results are deterministic within a given environment. The SS3 notebook uses `random_state=42` throughout.
-- **SS2 environment.** The committed SS2 results were produced on Python 3.11 with xgboost 2.0.3. The SS2 requirements files under `src/` only partly record that environment: `src/models/requirements.txt` pins pandas 3.0.5, numpy 2.4.6, xgboost 2.0.3 and jupyter 1.0.0, but leaves matplotlib, scikit-learn, joblib and notebook unpinned, and the preprocessing and feature engineering files likewise leave matplotlib unpinned. The root `requirements.txt` targets Python 3.14 instead.
+- **SS2 environment.** The committed SS2 results were produced on Python 3.11 with xgboost 2.0.3. The SS2 requirements files under `src/` only partly record that environment: `src/models/requirements.txt` pins pandas 3.0.5, numpy 2.4.6, xgboost 2.0.3 and jupyter 1.0.0, but leaves matplotlib, scikit-learn, joblib, notebook and statsmodels unpinned, and the preprocessing and feature engineering files likewise leave matplotlib unpinned. The root `requirements.txt` targets Python 3.14 instead.
 - **Re-running on a newer environment.** On Python 3.14 with xgboost 3.4.1, Model 1 reproduces exactly, while Model 2 shifts slightly: ROC-AUC 0.924 instead of 0.926, and the DeLong p-value 0.41 instead of 0.21. Recall (0.94) is unchanged, and the conclusions are the same. The documents in this repository quote the committed values.
 - **SS3 environment.** The SS3 notebook was run on the environment pinned in `requirements.txt`.
+
+---
+
+## Known Limitations
+
+These issues were found in a final review of the repository. They are recorded here so the written results can be read in context. None of them changes the committed numbers.
+
+- **Cross-validation order (SS2).** Both SS2 models tune hyperparameters with `TimeSeriesSplit`, but the training rows are ordered by institution and then quarter, so the folds are not chronological. The outer train and test split is time-based and unaffected. Cross-validation scores used to compare hyperparameters may therefore be less reliable than the model documents suggest.
+- **Test set used during model choice (SS2).** Model 1's regularisation trade-off was examined on the test set, and Model 2's final configuration was chosen partly using test results. The reported test metrics are therefore somewhat optimistic.
+- **Label horizon (SS2).** Risk labels for the last training quarter (2016-12) use returns up to 2017-05-15 (each label runs from quarter-end plus 45 days to the next quarter-end plus 45 days), which is after the 2017-03 test quarter's reporting date and the same day as its 45-day decision date. Under the filing-lag convention used for the label this is not look-ahead, but there is no buffer between the training labels and the test period.
+- **Forward-filled holdings (SS2).** Zero holdings in the 13F data are treated as missing and forward-filled, so a genuine exit from a position to zero cannot be recorded.
+- **Label built from concentration (SS2 and SS3).** In SS2 the loss label is tied to concentration by design, and in SS3 `hhi` is both a feature and half of the label definition, so high ROC-AUC values partly reflect how the labels are built.
+- **Small samples (SS3).** The SS3 validation and test sets contain 3 and 2 positive clients, so their metrics are early signals, not stable estimates.
+- **Local state.** The `.pkl` files in `artifacts/` on the author's machine were built by the later Python 3.14 re-run, and the files in `data/processed/` are out of step with the committed feature engineering output (the saved preprocessing output has 3,447 tickers with price data, while feature engineering loaded 3,451). Neither matches the state that produced the committed SS2 outputs, and some notebooks were not executed top to bottom in one fresh-kernel run.
+- **Recommendations report.** `reports/recommendations_report.pdf` is kept exactly as submitted. It predates SS3 (it says the client data was not yet available), describes McNemar's test as favouring Model 2 on recall (the test compares overall correctness, and its disagreements favour Model 1, 460 to 20), and calls `hhi` a "correctly-signed predictor" in XGBoost (tree-model importances have no sign). The corrected McNemar reading is in `experiments/results/Comparison.MD`.
 
 ---
 

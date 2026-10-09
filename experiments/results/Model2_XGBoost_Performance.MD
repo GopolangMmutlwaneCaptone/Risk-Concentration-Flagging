@@ -9,7 +9,7 @@ This document presents the test-set performance of Model 2 (XGBoost), described 
 ## How to Use
 
 1. Ensure `model_features.csv` exists in `data/processed/` (produced by Feature Engineering).
-2. Ensure `xgboost` is installed, using the root [`requirements.txt`](../../requirements.txt) (`pip install -r requirements.txt`, run from the repository root).
+2. Ensure `xgboost` is installed, using [`src/models/requirements.txt`](../../src/models/requirements.txt), which matches the committed results (Python 3.11, xgboost 2.0.3). The root [`requirements.txt`](../../requirements.txt) targets Python 3.14 and gives slightly different Model 2 values (see [Reproducibility](../../README.md#reproducibility) in the root README).
 3. Open `model2_xgboost.ipynb` and run all cells in order, top to bottom.
 4. The metrics and confusion matrix below are produced by the "Evaluate on Test Set" section, using the final model selected in "Final Model Selection" (tuned via expanded grid search).
 
@@ -38,4 +38,4 @@ Identical time-based test set used for Model 1: 5,093 institution-quarter observ
 
 **Accuracy (0.79) is a misleading headline metric on its own, given the 2.2% class imbalance in the test set**, a model that always predicted "no loss" would score 97.8% accuracy while being entirely useless for this study's purpose.
 
-**ROC-AUC (0.926) is marginally higher than Model 1's 0.921**, essentially equivalent ranking performance. Recall (0.94) is substantially higher than Model 1's 0.78, since Model 2's tree-based structure did not require the same interpretability-vs-recall trade-off Model 1 needed to correct an unstable `hhi` coefficient. `hhi` and `top_holding_pct` jointly account for approximately 77% of feature importance, confirming portfolio concentration as the dominant predictive signal (see Model2_XGBoost.MD for the full feature importance analysis, including its sensitivity to column-subsampling).
+**ROC-AUC (0.926) is marginally higher than Model 1's 0.921**, essentially equivalent ranking performance. Recall (0.94) is substantially higher than Model 1's 0.78, consistent with Model 2's tree-based structure not requiring the same interpretability-vs-recall trade-off Model 1 needed to correct an unstable `hhi` coefficient. `hhi` and `top_holding_pct` jointly account for approximately 77% of feature importance, confirming portfolio concentration as the dominant predictive signal (see Model2_XGBoost.MD for the full feature importance analysis, including its sensitivity to column-subsampling).
