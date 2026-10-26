@@ -4,12 +4,14 @@
 
 **Client:** STADIOEquities (digital investment platform)
 **Author:** Gopolang Mmutlwane
+**Presentation video:** [Watch the CAP182 capstone presentation](https://github.com/GopolangMmutlwaneCaptone/Risk-Concentration-Flagging/blob/main/SS3/video_Presentation/Video_Presentation_Risk_Concentration_Flagging.mp4)
 
 ## Table of Contents
 - [Motivation](#motivation)
 - [Problem Statement](#problem-statement)
 - [Project Stages](#project-stages)
 - [Results at a Glance](#results-at-a-glance)
+- [Presentation Video](#presentation-video)
 - [Repository Structure](#repository-structure)
 - [Dataset](#dataset)
 - [Setup and Running the Notebooks](#setup-and-running-the-notebooks)
@@ -39,13 +41,14 @@ Despite STADIOEquities' current approach of identifying unsuitable investment be
 
 ## Project Stages
 
-The project was delivered in three stages. Each stage builds on the previous one.
+The project was delivered in three stages, plus a recorded presentation. Each stage builds on the previous one.
 
 | Stage | What it covers | Where to look |
 |---|---|---|
 | **SS1** | Problem selection and framing, the data request to STADIOEquities, and the RAAIDD log | [Problem Statement](#problem-statement), [Data Request](#data-request), [RAAIDD Log](#raaidd-log) |
 | **SS2** | The methodology, validated on a public proxy dataset (SEC Form 13F institutional holdings): literature review, preprocessing, feature engineering, label construction, two models (logistic regression and XGBoost), a statistical comparison, and a recommendations report | [Literature Review](#literature-review), [Related Documentation](#related-documentation), [Recommendations Report](reports/recommendations_report.pdf) |
-| **SS3** | Part B: the model family chosen in SS2 (XGBoost), retrained on the client data extract with different hyperparameters (synthetic data supplied by STADIOEquities), from dataset loading through to results visualisation | [`SS3_PartB/SS3_PartB.ipynb`](SS3_PartB/SS3_PartB.ipynb) |
+| **SS3** | Part A: a written peer review of a classmate's project. Part B: the model family chosen in SS2 (XGBoost), retrained on the client data extract with different hyperparameters (synthetic data supplied by STADIOEquities), from dataset loading through to results visualisation | [SS3 overview](SS3/README.md), [`SS3/PartB/SS3_PartB.ipynb`](SS3/PartB/SS3_PartB.ipynb), [Part A peer review](SS3/PartA/GopolangMmutlwane_26304114_CAP182_SS3_PartA.pdf) |
+| **Presentation** | A recorded video presentation of the problem, the test on public data, the application to client data, and the recommendations, with the slide deck used in it | [Presentation Video](#presentation-video), [`SS3/video_Presentation/`](SS3/video_Presentation/) |
 
 ---
 
@@ -77,6 +80,12 @@ Points to read alongside these numbers:
 
 ---
 
+## Presentation Video
+
+A recorded presentation of the project, covering the problem, how the approach was tested on public data, what happened when it was applied to the STADIOEquities client extract, and the recommendations: [Watch the presentation](https://github.com/GopolangMmutlwaneCaptone/Risk-Concentration-Flagging/blob/main/SS3/video_Presentation/Video_Presentation_Risk_Concentration_Flagging.mp4). The video and the PowerPoint slide deck used in it are in [`SS3/video_Presentation/`](SS3/video_Presentation/).
+
+---
+
 ## Repository Structure
 
 This repository is organised as follows:
@@ -87,14 +96,14 @@ This repository is organised as follows:
 | `src/preprocessing/` | SS2 data cleaning and preprocessing notebook and documentation |
 | `src/features/` | SS2 feature engineering notebook and documentation |
 | `src/models/` | SS2 model notebooks (logistic regression, XGBoost) and documentation |
-| `SS3_PartB/` | SS3 Part B notebook applying the model family chosen in SS2 (XGBoost), retrained on the client data extract with different hyperparameters; the charts it produces are saved in `SS3_PartB/charts/` |
+| `SS3/` | Everything for SS3, with a README in each subfolder. `SS3/PartA/` holds the written peer review (PDF). `SS3/PartB/` holds the notebook applying the model family chosen in SS2 (XGBoost), retrained on the client data extract with different hyperparameters; the charts it produces are saved in `SS3/PartB/charts/`. `SS3/video_Presentation/` holds the recorded video presentation and its slide deck |
 | `artifacts/` | Saved trained model artifacts, generated locally by running the model notebooks (not committed) |
 | `experiments/results/` | Experimental results (metrics, comparison, performance documents) |
 | `reports/` | Client-facing written reports and recommendations, with charts in `reports/charts/` |
 | `requests/` | Client-facing data requests (data request PDF) |
 | `literature-review/` | SS2 literature review and public dataset description |
 
-Each notebook lives beside the code and write-ups it belongs to (`src/preprocessing/`, `src/features/`, `src/models/` and `SS3_PartB/`), so there is no separate `notebooks/` folder.
+Each notebook lives beside the code and write-ups it belongs to (`src/preprocessing/`, `src/features/`, `src/models/` and `SS3/PartB/`), so there is no separate `notebooks/` folder.
 
 Most folders contain their own `README.md` describing their contents in more detail.
 
@@ -135,7 +144,7 @@ Then open the notebooks in VS Code or Jupyter and select the `.venv` interpreter
 3. `src/models/model1_logistic_regression.ipynb`
 4. `src/models/model2_xgboost.ipynb`, which must run after Model 1 because it loads the model and scaler Model 1 saves to `artifacts/`.
 
-**SS3:** after placing the client extract (see [Dataset](#dataset)), run `SS3_PartB/SS3_PartB.ipynb`. It reads only the client extract and does not depend on any SS2 output.
+**SS3:** after placing the client extract (see [Dataset](#dataset)), run `SS3/PartB/SS3_PartB.ipynb` with `SS3/PartB/` as the working directory. It reads only the client extract and does not depend on any SS2 output.
 
 ---
 
@@ -212,4 +221,8 @@ A review of three related publications and a description of the publicly availab
 - [Model 2 Performance](experiments/results/Model2_XGBoost_Performance.MD): Model 2 test-set metrics and results
 - [Model Comparison](experiments/results/Comparison.MD): side-by-side comparison and model recommendation
 - [Recommendations Report](reports/recommendations_report.pdf): model recommendations, model improvement suggestions, and alignment with literature
-- [SS3 Part B notebook](SS3_PartB/SS3_PartB.ipynb): the model family chosen in SS2 (XGBoost), retrained on the client data extract with different hyperparameters
+- [SS3 overview](SS3/README.md): what the SS3 folder contains and the Part B results at a glance
+- [SS3 Part A peer review](SS3/PartA/GopolangMmutlwane_26304114_CAP182_SS3_PartA.pdf): written peer review of a classmate's project
+- [SS3 Part B notebook](SS3/PartB/SS3_PartB.ipynb): the model family chosen in SS2 (XGBoost), retrained on the client data extract with different hyperparameters
+- [Presentation Video](SS3/video_Presentation/Video_Presentation_Risk_Concentration_Flagging.mp4): recorded presentation of the project
+- [Presentation slides](SS3/video_Presentation/Risk_Concentration_Flagging_Capstone_Video_Deck.pptx): the PowerPoint deck used in the video
