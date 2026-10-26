@@ -1,33 +1,25 @@
-# SS3: Applying the Approach to Client Data
+# Presentation Video
 
-SS3 is the final stage of the capstone for the client STADIOEquities. It applies the approach tested in SS2 (XGBoost, chosen on the public SEC Form 13F dataset that stood in for client data) to the client extract supplied by STADIOEquities. It also contains the written peer review and the recorded presentation of the whole project.
+This folder contains the recorded video presentation of the capstone project for STADIOEquities, together with the slide deck used in the video.
 
 ## Contents
 
-| Folder | What it contains |
-|---|---|
-| [`PartA/`](PartA/) | Part A: the written peer review of a classmate's capstone project (PDF) |
-| [`PartB/`](PartB/) | Part B: the notebook that retrains XGBoost on the client extract, with its charts and requirements |
-| [`video_Presentation/`](video_Presentation/) | Part C: the recorded video presentation and the PowerPoint slide deck used in it |
+- [`Video_Presentation_Risk_Concentration_Flagging.mp4`](Video_Presentation_Risk_Concentration_Flagging.mp4): the presentation video
+- [`Risk_Concentration_Flagging_Capstone_Presentation.pptx`](Risk_Concentration_Flagging_Capstone_Presentation.pptx): the PowerPoint slide deck shown in the video (13 slides)
 
-## Presentation video
+## What the video covers
 
-A recorded presentation of the whole project: the problem, how the approach was tested on public data, what happened when it was applied to the client extract, and the recommendations. See [`video_Presentation/`](video_Presentation/) for the video and the slides.
+1. The real-world problem: clients concentrating their money in a single stock, and complaints surfacing only after a loss.
+2. How the project was tackled: framing the problem, testing the approach on public data, and applying it to client data.
+3. The two datasets: public SEC Form 13F filings (used as a stand-in while client data was not yet available) and the STADIOEquities client extract.
+4. Data preparation, and the maths behind the concentration measure (HHI) and the flag.
+5. Exploratory insights from the client data.
+6. The method: Logistic Regression compared with XGBoost.
+7. Results on the public data, then results on the client data.
+8. Recommendations and limitations.
 
-## Part B at a glance
+## Where to find the full results
 
-- **Data:** 418 clients from the STADIOEquities extract (synthetic data), of whom 17 (4.07%) are flagged. A client is flagged when stated risk appetite is Low and portfolio concentration (HHI) is above the 75th percentile.
-- **Split:** stratified 70/15/15, giving 292, 63 and 63 clients with 12, 3 and 2 flagged clients.
-- **Results:** ROC-AUC 0.856 on validation (1 of 3 flagged clients caught) and 0.951 on the unseen test set (2 of 2 caught).
-- **Main finding:** a simple rule that flags every client above the HHI threshold performs as well as the model on this label (cross-validated ROC-AUC 0.895 for HHI alone against 0.887 for the model), so the rule is the better first-pass screen. The flag could not be validated against complaint records, so it is a business-defined rule.
-- **Caution:** with only 3 and 2 flagged clients in the validation and test sets, these figures are early signals, not stable estimates.
+The slides summarise the findings. For the full results and known limitations, see [Results at a Glance](../../README.md#results-at-a-glance) and [Known Limitations](../../README.md#known-limitations) in the root README, and the Part B notebook in [`../PartB/`](../PartB/).
 
-For the full set of results and known limitations, see [Results at a Glance](../README.md#results-at-a-glance) and [Known Limitations](../README.md#known-limitations) in the root README.
-
-## Running Part B
-
-See [`PartB/README.md`](PartB/README.md). The client extract is not included in this repository.
-
-## Navigation
-
-- [Back to the root README](../README.md)
+[Back to SS3 overview](../README.md)
