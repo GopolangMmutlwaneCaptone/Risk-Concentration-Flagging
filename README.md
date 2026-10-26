@@ -225,4 +225,4 @@ A review of three related publications and a description of the publicly availab
 - [SS3 Part A peer review](SS3/PartA/GopolangMmutlwane_26304114_CAP182_SS3_PartA.pdf): written peer review of a classmate's project
 - [SS3 Part B notebook](SS3/PartB/SS3_PartB.ipynb): the model family chosen in SS2 (XGBoost), retrained on the client data extract with different hyperparameters
 - [Presentation Video](SS3/video_Presentation/Video_Presentation_Risk_Concentration_Flagging.mp4): recorded presentation of the project
-- [Presentation slides](SS3/video_Presentation/Risk_Concentration_Flagging_Capstone_Video_Deck.pptx): the PowerPoint deck used in the video
+- [Presentation slides](SS3/video_Presentation/Risk_Concentration_Flagging_Capstone_Presentation.pptx): the PowerPoint deck used in the video
