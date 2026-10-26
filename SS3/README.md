@@ -1,6 +1,6 @@
 # SS3: Applying the Approach to Client Data
 
-SS3 is the final stage of the capstone for the client STADIOEquities. It applies the approach validated in SS2 (XGBoost, chosen on the public SEC Form 13F proxy dataset) to the client data extract supplied by STADIOEquities, and it contains the written peer review and the recorded presentation.
+SS3 is the final stage of the capstone for the client STADIOEquities. It applies the approach tested in SS2 (XGBoost, chosen on the public SEC Form 13F dataset that stood in for client data) to the client extract supplied by STADIOEquities. It also contains the written peer review and the recorded presentation of the whole project.
 
 ## Contents
 
@@ -8,7 +8,14 @@ SS3 is the final stage of the capstone for the client STADIOEquities. It applies
 |---|---|
 | [`PartA/`](PartA/) | Part A: the written peer review of a classmate's capstone project (PDF) |
 | [`PartB/`](PartB/) | Part B: the notebook that retrains XGBoost on the client extract, with its charts and requirements |
-| [`video_Presentation/`](video_Presentation/) | The recorded video presentation of the whole project |
+| [`video_Presentation/`](video_Presentation/) | The recorded video presentation and the PowerPoint slide deck used in it |
+
+## Presentation video
+
+A recorded presentation of the whole project: the problem, how the approach was tested on public data, what happened when it was applied to the client extract, and the recommendations.
+
+- [Presentation video](video_Presentation/Video_Presentation_Risk_Concentration_Flagging.mp4)
+- [Slide deck](video_Presentation/Risk_Concentration_Flagging_Capstone_Presentation.pptx)
 
 ## Part B at a glance
 
